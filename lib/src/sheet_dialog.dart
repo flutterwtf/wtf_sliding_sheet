@@ -56,7 +56,7 @@ Future<T?> showSlidingBottomSheet<T>(
               route: route,
               controller: controller,
               snapSpec: snapSpec,
-              duration: dialog.duration,
+              openDuration: dialog.duration,
               color: dialog.color ??
                   theme.bottomSheetTheme.backgroundColor ??
                   theme.dialogTheme.backgroundColor ??
@@ -87,6 +87,7 @@ Future<T?> showSlidingBottomSheet<T>(
               liftOnScrollHeaderElevation: dialog.liftOnScrollHeaderElevation,
               liftOnScrollFooterElevation: dialog.liftOnScrollFooterElevation,
               body: null,
+              openBouncing: false,
             );
 
             if (parentBuilder != null) {
@@ -232,9 +233,13 @@ class SlidingSheetDialog {
 
 /// A transparent route for a bottom sheet dialog.
 class _SlidingSheetRoute<T> extends PageRoute<T> {
-  final Widget Function(BuildContext, Animation<double>, _SlidingSheetRoute<T>)
-      builder;
+  final Widget Function(
+    BuildContext,
+    Animation<double>,
+    _SlidingSheetRoute<T>,
+  ) builder;
   final Duration duration;
+
   _SlidingSheetRoute({
     required this.builder,
     required this.duration,

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:example/util/util.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -64,7 +63,7 @@ class _ExampleState extends State<Example> {
 
   Widget buildSheet() {
     return SlidingSheet(
-      duration: const Duration(milliseconds: 900),
+      openDuration: const Duration(milliseconds: 900),
       controller: controller,
       color: Colors.white,
       shadowColor: Colors.black26,
@@ -122,8 +121,9 @@ class _ExampleState extends State<Example> {
               width: 16,
               height: 4,
               borderRadius: 2,
-              color:
-                  Colors.grey.withOpacity(.5 * (1 - interval(0.7, 1.0, state.progress))),
+              color: Colors.grey.withOpacity(
+                .5 * (1 - interval(0.7, 1.0, state.progress)),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -217,10 +217,13 @@ class _ExampleState extends State<Example> {
             () async {
               // Inherit from context...
               await SheetController.of(context).hide();
-              Future.delayed(const Duration(milliseconds: 1500), () {
-                // or use the controller
-                controller.show();
-              });
+              Future.delayed(
+                const Duration(milliseconds: 1500),
+                () {
+                  // or use the controller
+                  controller.show();
+                },
+              );
             },
             color: mapsBlue,
           ),
@@ -237,9 +240,7 @@ class _ExampleState extends State<Example> {
                 ),
                 Text(
                   !isExpanded ? 'Steps & more' : 'Show map',
-                  style: textStyle.copyWith(
-                    fontSize: 15,
-                  ),
+                  style: textStyle.copyWith(fontSize: 15),
                 ),
                 !isExpanded
                     ? () => controller.scrollTo(state.maxScrollExtent)
@@ -348,11 +349,22 @@ class _ExampleState extends State<Example> {
 
   Widget buildSteps(BuildContext context) {
     final steps = [
-      Step('Go to your pubspec.yaml file.', '2 seconds'),
       Step(
-          "Add the newest version of 'sliding_sheet' to your dependencies.", '5 seconds'),
-      Step("Run 'flutter packages get' in the terminal.", '4 seconds'),
-      Step("Happy coding!", 'Forever'),
+        'Go to your pubspec.yaml file.',
+        '2 seconds',
+      ),
+      Step(
+        "Add the newest version of 'sliding_sheet' to your dependencies.",
+        '5 seconds',
+      ),
+      Step(
+        "Run 'flutter packages get' in the terminal.",
+        '4 seconds',
+      ),
+      Step(
+        "Happy coding!",
+        'Forever',
+      ),
     ];
 
     return ListView.builder(
@@ -370,9 +382,7 @@ class _ExampleState extends State<Example> {
             children: <Widget>[
               Text(
                 step.instruction,
-                style: textStyle.copyWith(
-                  fontSize: 16,
-                ),
+                style: textStyle.copyWith(fontSize: 16),
               ),
               const SizedBox(height: 16),
               Row(
@@ -489,7 +499,11 @@ class _ExampleState extends State<Example> {
 
             if (backButton || backDrop) {
               const duration = Duration(milliseconds: 300);
-              await controller.snapToExtent(0.2, duration: duration, clamp: false);
+              await controller.snapToExtent(
+                0.2,
+                duration: duration,
+                clamp: false,
+              );
               await controller.snapToExtent(0.4, duration: duration);
               // or Navigator.pop(context);
             }
@@ -519,7 +533,9 @@ class _ExampleState extends State<Example> {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis tellus lacus, et pulvinar orci eleifend in.',
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing '
+                          'elit. Praesent sagittis tellus lacus, et pulvinar '
+                          'orci eleifend in.',
                           style: textTheme.subtitle1.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -589,13 +605,15 @@ class _ExampleState extends State<Example> {
         Align(
           alignment: Alignment.topRight,
           child: Padding(
-            padding:
-                EdgeInsets.fromLTRB(0, MediaQuery.of(context).padding.top + 16, 16, 0),
+            padding: EdgeInsets.fromLTRB(
+              0,
+              MediaQuery.of(context).padding.top + 16,
+              16,
+              0,
+            ),
             child: FloatingActionButton(
               backgroundColor: Colors.white,
-              onPressed: () async {
-                await showBottomSheetDialog(context);
-              },
+              onPressed: () async => showBottomSheetDialog(context),
               child: const Icon(
                 Icons.layers,
                 color: mapsBlue,
@@ -631,6 +649,7 @@ class _ExampleState extends State<Example> {
 class Step {
   final String instruction;
   final String time;
+
   Step(
     this.instruction,
     this.time,
@@ -640,6 +659,7 @@ class Step {
 class Traffic {
   final double intesity;
   final String time;
+
   Traffic(
     this.intesity,
     this.time,

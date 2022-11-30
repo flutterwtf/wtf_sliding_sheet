@@ -71,11 +71,21 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final w = width == null || width == EXPAND ? double.infinity : width == WRAP ? null : width;
+    final w = width == null || width == EXPAND
+        ? double.infinity
+        : width == WRAP
+            ? null
+            : width;
     final h = height == EXPAND ? double.infinity : height;
     final br = customBorders ??
         BorderRadius.circular(
-          boxShape == BoxShape.rectangle ? borderRadius : w != null ? w / 2.0 : h != null ? h / 2.0 : 0,
+          boxShape == BoxShape.rectangle
+              ? borderRadius
+              : w != null
+                  ? w / 2.0
+                  : h != null
+                      ? h / 2.0
+                      : 0,
         );
 
     Widget content = Padding(

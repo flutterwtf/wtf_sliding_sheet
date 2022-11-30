@@ -106,7 +106,9 @@ class SnapSpec {
 
   @override
   String toString() {
-    return 'SnapSpec(snap: $snap, snappings: $snappings, initialExtent: $initialSnap, positioning: $positioning, onSnap: $onSnap)';
+    return 'SnapSpec(snap: $snap, snappings: $snappings, '
+        'initialExtent: $initialSnap, positioning: $positioning, '
+        'onSnap: $onSnap)';
   }
 
   @override
@@ -157,12 +159,12 @@ class ScrollSpec {
   const ScrollSpec.overscroll({Color? color}) : this(overscrollColor: color);
 
   /// Creates an iOS bouncing scroll effect.
-  const ScrollSpec.bouncingScroll()
-      : this(physics: const BouncingScrollPhysics());
+  const ScrollSpec.bouncingScroll() : this(physics: const BouncingScrollPhysics());
 
   @override
   String toString() {
-    return 'ScrollSpec(overscroll: $overscroll, overscrollColor: $overscrollColor, physics: $physics, showScrollbar: $showScrollbar)';
+    return 'ScrollSpec(overscroll: $overscroll, overscrollColor: $overscrollColor, '
+        'physics: $physics, showScrollbar: $showScrollbar)';
   }
 
   @override
@@ -216,8 +218,8 @@ class ParallaxSpec {
   }) : assert(amount >= 0.0 && amount <= 1.0);
 
   @override
-  String toString() =>
-      'ParallaxSpec(enabled: $enabled, amount: $amount, extent: $endExtent)';
+  String toString() => 'ParallaxSpec(enabled: $enabled, amount: $amount, '
+      'extent: $endExtent)';
 
   @override
   bool operator ==(Object o) {

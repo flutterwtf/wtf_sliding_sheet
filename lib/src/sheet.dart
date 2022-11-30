@@ -2,25 +2,32 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'sheet_container.dart';
+import 'simple_bounce_curve.dart';
 import 'specs.dart';
 import 'util.dart';
 
 part 'scrolling.dart';
+
+part 'sheet_controller.dart';
+
 part 'sheet_dialog.dart';
 
+part 'sheet_state.dart';
+
+/// Widget for building sheet
 typedef SheetBuilder = Widget Function(BuildContext context, SheetState state);
 
+/// Callback for changing state of the sheet
 typedef SheetListener = void Function(SheetState state);
 
-typedef OnDismissPreventedCallback = void Function(
-    bool backButton, bool backDrop);
+/// Callback prevented dismiss the dialog
+typedef OnDismissPreventedCallback = void Function(bool backButton, bool backDrop);
 
+/// Callback for opening sheet
 typedef OnOpenCallback = void Function();
 
 /// A widget that can be dragged and scrolled in a single gesture and snapped
@@ -54,7 +61,7 @@ class SlidingSheet extends StatefulWidget {
   /// {@template sliding_sheet.duration}
   /// The base animation duration for the sheet. Swipes and flings may have a different duration.
   /// {@endtemplate}
-  final Duration duration;
+  final Duration openDuration;
 
   /// {@template sliding_sheet.color}
   /// The background color of the sheet.
@@ -208,7 +215,6 @@ class SlidingSheet extends StatefulWidget {
   // * SlidingSheetDialog fields
 
   /// private, do not use!
-  // ignore: public_member_api_docs
   final _SlidingSheetRoute? route;
 
   /// {@template sliding_sheet.isDismissable}
@@ -228,7 +234,18 @@ class SlidingSheet extends StatefulWidget {
   /// {@endtemplate}
   final OnDismissPreventedCallback? onDismissPrevented;
 
+  /// {@template sliding_sheet.onOpen}
+  /// A callback that gets invoked when a user opening sheet
+  /// {@endtemplate}
   final OnOpenCallback? onOpen;
+
+  /// {@template sliding_sheet.openBouncing}
+  /// A flag to control sheet open animation.
+  /// If `true` SimpleBounceOut curve is used, otherwise Curves.ease is used.
+  ///
+  /// Defaults to `false` (Curves.ease).
+  /// {@endtemplate}
+  final bool openBouncing;
 
   /// Creates a sheet than can be dragged and scrolled in a single gesture to be
   /// placed inside you widget tree.
@@ -264,7 +281,7 @@ class SlidingSheet extends StatefulWidget {
     SheetBuilder? headerBuilder,
     SheetBuilder? footerBuilder,
     SnapSpec snapSpec = const SnapSpec(),
-    Duration duration = const Duration(milliseconds: 1000),
+    Duration openDuration = const Duration(milliseconds: 1000),
     Color? color,
     Color? backdropColor,
     Color shadowColor = Colors.black54,
@@ -291,13 +308,14 @@ class SlidingSheet extends StatefulWidget {
     double liftOnScrollFooterElevation = 0.0,
     OnDismissPreventedCallback? onDismissPrevented,
     OnOpenCallback? onOpen,
+    bool openBouncing = false,
   }) : this._(
           key: key,
           builder: builder,
           headerBuilder: headerBuilder,
           footerBuilder: footerBuilder,
           snapSpec: snapSpec,
-          duration: duration,
+          openDuration: openDuration,
           color: color,
           backdropColor: backdropColor,
           shadowColor: shadowColor,
@@ -324,6 +342,7 @@ class SlidingSheet extends StatefulWidget {
           liftOnScrollFooterElevation: liftOnScrollFooterElevation,
           onDismissPrevented: onDismissPrevented,
           onOpen: onOpen,
+          openBouncing: openBouncing,
         );
 
   SlidingSheet._({
@@ -332,7 +351,7 @@ class SlidingSheet extends StatefulWidget {
     required this.headerBuilder,
     required this.footerBuilder,
     required this.snapSpec,
-    required this.duration,
+    required this.openDuration,
     required this.color,
     required this.backdropColor,
     required this.shadowColor,
@@ -355,16 +374,21 @@ class SlidingSheet extends StatefulWidget {
     required this.extendBody,
     required this.liftOnScrollHeaderElevation,
     required this.liftOnScrollFooterElevation,
+    required this.openBouncing,
     this.body,
     this.parallaxSpec,
     this.route,
     this.isDismissable = true,
     this.onDismissPrevented,
     this.onOpen,
-  })  : assert(snapSpec.snappings.length >= 2,
-            'There must be at least two snapping extents to snap in between.'),
-        assert(snapSpec.minSnap != snapSpec.maxSnap || route != null,
-            'The min and max snaps cannot be equal.'),
+  })  : assert(
+          snapSpec.snappings.length >= 2,
+          'There must be at least two snapping extents to snap in between.',
+        ),
+        assert(
+          snapSpec.minSnap != snapSpec.maxSnap || route != null,
+          'The min and max snaps cannot be equal.',
+        ),
         assert(axisAlignment >= -1.0 && axisAlignment <= 1.0),
         assert(liftOnScrollHeaderElevation >= 0.0),
         assert(liftOnScrollFooterElevation >= 0.0),
@@ -374,13 +398,13 @@ class SlidingSheet extends StatefulWidget {
   _SlidingSheetState createState() => _SlidingSheetState();
 }
 
-class _SlidingSheetState extends State<SlidingSheet>
-    with TickerProviderStateMixin {
+class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMixin {
   final GlobalKey childKey = GlobalKey();
   final GlobalKey headerKey = GlobalKey();
   final GlobalKey footerKey = GlobalKey();
 
   bool get hasHeader => widget.headerBuilder != null;
+
   bool get hasFooter => widget.footerBuilder != null;
 
   late List<double> snappings;
@@ -392,49 +416,59 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   // Whether the dialog completed its initial fly in
   bool didCompleteInitialRoute = false;
+
   // Whether a dismiss was already triggered by the sheet itself
   // and thus further route pops can be safely ignored
   bool dismissUnderway = false;
+
   // Whether the drag on a delegating widget (such as the backdrop)
   // did start, when the sheet was not fully collapsed
   bool didStartDragWhenNotCollapsed = false;
   _SheetExtent? extent;
   SheetController? sheetController;
-  _SlidingSheetScrollController? controller;
+  late _SlidingSheetScrollController controller;
 
   // Whether the sheet has drawn its first frame.
   bool get isLaidOut => availableHeight > 0 && childHeight > 0;
+
   // The total height of all sheet components.
   double get sheetHeight =>
-      childHeight +
-      headerHeight +
-      footerHeight +
-      padding.vertical +
-      borderHeight;
+      childHeight + headerHeight + footerHeight + padding.vertical + borderHeight;
+
   // The maxiumum height that this sheet will cover.
   double get maxHeight => math.min(sheetHeight, availableHeight);
+
   bool get isScrollable => sheetHeight >= availableHeight;
 
-  double get currentExtent =>
-      (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
+  double get currentExtent => (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
+
   set currentExtent(double value) => extent?.currentExtent = value;
+
   double get headerExtent =>
       isLaidOut ? (headerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get footerExtent =>
       isLaidOut ? (footerHeight + (borderHeight / 2)) / availableHeight : 0.0;
+
   double get headerFooterExtent => headerExtent + footerExtent;
+
   double get minExtent => snappings[isDialog ? 1 : 0].clamp(0.0, 1.0);
+
   double get maxExtent => snappings.last.clamp(0.0, 1.0);
-  double get initialExtent => snapSpec.initialSnap != null
-      ? _normalizeSnap(snapSpec.initialSnap!)
-      : minExtent;
+
+  double get initialExtent =>
+      snapSpec.initialSnap != null ? _normalizeSnap(snapSpec.initialSnap!) : minExtent;
 
   bool get isDialog => widget.route != null;
+
   ScrollSpec get scrollSpec => widget.scrollSpec;
+
   SnapSpec get snapSpec => widget.snapSpec;
+
   SnapPositioning get snapPositioning => snapSpec.positioning;
 
   double get borderHeight => (widget.border?.top.width ?? 0) * 2;
+
   EdgeInsets get padding {
     final begin = widget.padding ?? const EdgeInsets.all(0);
 
@@ -450,7 +484,10 @@ class _SlidingSheetState extends State<SlidingSheet>
   double? get cornerRadius {
     if (widget.cornerRadiusOnFullscreen == null) return widget.cornerRadius;
     return lerpDouble(
-        widget.cornerRadius, widget.cornerRadiusOnFullscreen, lerpFactor);
+      widget.cornerRadius,
+      widget.cornerRadiusOnFullscreen,
+      lerpFactor,
+    );
   }
 
   double get lerpFactor {
@@ -473,8 +510,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       );
 
   // A notifier that a child SheetListenableBuilder can inherit to
-  final ValueNotifier<SheetState> stateNotifier =
-      ValueNotifier(SheetState.inital());
+  final ValueNotifier<SheetState> stateNotifier = ValueNotifier(SheetState.inital());
 
   @override
   void initState() {
@@ -502,11 +538,11 @@ class _SlidingSheetState extends State<SlidingSheet>
       didCompleteInitialRoute = true;
       // Set the inital extent after the first frame.
       postFrame(
-              () async {
-            await snapToExtent(initialExtent);
-            setState(() => currentExtent = initialExtent);
-            widget.onOpen?.call();
-          }
+        () async {
+          await snapToExtent(initialExtent);
+          setState(() => currentExtent = initialExtent);
+          widget.onOpen?.call();
+        },
       );
     }
   }
@@ -523,10 +559,10 @@ class _SlidingSheetState extends State<SlidingSheet>
       (_) {
         if (!dismissUnderway) {
           dismissUnderway = true;
-          controller!.jumpTo(controller!.offset);
+          controller.jumpTo(controller.offset);
           // When the route gets popped we animate fully out - not just
           // to the minExtent.
-          controller!.snapToExtent(0.0, this, clamp: false);
+          controller.snapToExtent(0.0, this, clamp: false);
         }
       },
     );
@@ -558,12 +594,9 @@ class _SlidingSheetState extends State<SlidingSheet>
   // Measure the height of all sheet components.
   void _measure() {
     postFrame(() {
-      final RenderBox? child =
-          childKey.currentContext?.findRenderObject() as RenderBox?;
-      final RenderBox? header =
-          headerKey.currentContext?.findRenderObject() as RenderBox?;
-      final RenderBox? footer =
-          footerKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? child = childKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? header = headerKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? footer = footerKey.currentContext?.findRenderObject() as RenderBox?;
 
       final isChildLaidOut = child?.hasSize == true;
       final prevChildHeight = childHeight;
@@ -671,6 +704,8 @@ class _SlidingSheetState extends State<SlidingSheet>
         ..availableHeight = availableHeight
         ..maxExtent = maxExtent
         ..minExtent = minExtent;
+
+      if (currentExtent > maxExtent) currentExtent = maxExtent;
     }
   }
 
@@ -683,9 +718,16 @@ class _SlidingSheetState extends State<SlidingSheet>
 
     // Assign the controller functions to the state functions.
     sheetController!._scrollTo = scrollTo;
-    sheetController!._snapToExtent = (snap, {duration, clamp}) {
-      return snapToExtent(_normalizeSnap(snap),
-          duration: duration, clamp: clamp);
+    sheetController!._snapToExtent = (
+      snap, {
+      duration,
+      clamp,
+    }) {
+      return snapToExtent(
+        _normalizeSnap(snap),
+        duration: duration,
+        clamp: clamp,
+      );
     };
     sheetController!._expand = () => snapToExtent(maxExtent);
     sheetController!._collapse = () => snapToExtent(minExtent);
@@ -713,18 +755,18 @@ class _SlidingSheetState extends State<SlidingSheet>
     bool? clamp,
   }) async {
     if (!isLaidOut) return;
-    duration ??= widget.duration;
+    duration ??= widget.openDuration;
 
     if (!state.isAtTop) {
       duration *= 0.5;
-      await controller!.animateTo(
+      await controller.animateTo(
         0.0,
         duration: duration,
         curve: Curves.easeInCubic,
       );
     }
 
-    await controller!.snapToExtent(
+    await controller.snapToExtent(
       snap,
       this,
       duration: duration,
@@ -733,10 +775,13 @@ class _SlidingSheetState extends State<SlidingSheet>
     );
   }
 
-  Future<void> scrollTo(double offset,
-      {Duration? duration, Curve? curve}) async {
+  Future<void> scrollTo(
+    double offset, {
+    Duration? duration,
+    Curve? curve,
+  }) async {
     if (!isLaidOut) return;
-    duration ??= widget.duration;
+    duration ??= widget.openDuration;
 
     if (!extent!.isAtMax) {
       duration *= 0.5;
@@ -746,7 +791,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       );
     }
 
-    await controller!.animateTo(
+    await controller.animateTo(
       offset,
       duration: duration,
       curve: curve ?? (!extent!.isAtMax ? Curves.easeOutCirc : Curves.ease),
@@ -754,8 +799,8 @@ class _SlidingSheetState extends State<SlidingSheet>
   }
 
   void _nudgeToNextSnap() {
-    if (!controller!.inInteraction && state.isShown) {
-      controller!.delegateFling();
+    if (!controller.inInteraction && state.isShown) {
+      controller.delegateFling();
     }
   }
 
@@ -766,10 +811,12 @@ class _SlidingSheetState extends State<SlidingSheet>
       snapToExtent(0.0, velocity: velocity);
     } else if (!isDialog) {
       final num fractionCovered =
-          ((currentExtent - minExtent) / (maxExtent - minExtent))
-              .clamp(0.0, 1.0);
+          ((currentExtent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0);
       final timeFraction = 1.0 - (fractionCovered * 0.5);
-      snapToExtent(minExtent, duration: widget.duration * timeFraction);
+      snapToExtent(
+        minExtent,
+        duration: widget.openDuration * timeFraction,
+      );
     }
     _onDismissPrevented(backButton: isBackButton, backDrop: isBackDrop);
   }
@@ -777,14 +824,11 @@ class _SlidingSheetState extends State<SlidingSheet>
   // Ensure that the sheet sizes itself correctly when the
   // constraints change.
   void _adjustSnapForIncomingConstraints(double previousHeight) {
-    if (previousHeight > 0.0 &&
-        previousHeight != availableHeight &&
-        state.isShown) {
+    if (previousHeight > 0.0 && previousHeight != availableHeight && state.isShown) {
       _updateSnappingsAndExtent();
 
       final num changeAdjustedExtent =
-          ((currentExtent * previousHeight) / availableHeight)
-              .clamp(minExtent, maxExtent);
+          ((currentExtent * previousHeight) / availableHeight).clamp(minExtent, maxExtent);
 
       final isAroundFixedSnap = snappings.any(
         (snap) => (snap - changeAdjustedExtent).abs() < 0.01,
@@ -866,7 +910,11 @@ class _SlidingSheetState extends State<SlidingSheet>
           }
         } else {
           if (!state.isCollapsed) {
-            _pop(0.0, false, true);
+            if (widget.onDismissPrevented != null) {
+              _onDismissPrevented(backButton: true);
+            } else {
+              _pop(0.0, false, true);
+            }
             return false;
           } else {
             return true;
@@ -933,9 +981,7 @@ class _SlidingSheetState extends State<SlidingSheet>
             builder: (context, dynamic extent, sheet) {
               final translation = () {
                 if (headerFooterExtent > 0.0) {
-                  return 1.0 -
-                      (currentExtent.clamp(0.0, headerFooterExtent) /
-                          headerFooterExtent);
+                  return 1.0 - (currentExtent.clamp(0.0, headerFooterExtent) / headerFooterExtent);
                 } else {
                   return 0.0;
                 }
@@ -944,9 +990,7 @@ class _SlidingSheetState extends State<SlidingSheet>
               return Invisible(
                 invisible: !isLaidOut || currentExtent == 0.0,
                 child: FractionallySizedBox(
-                  heightFactor: isLaidOut
-                      ? currentExtent.clamp(headerFooterExtent, 1.0)
-                      : 1.0,
+                  heightFactor: isLaidOut ? currentExtent.clamp(headerFooterExtent, 1.0) : 1.0,
                   alignment: Alignment.bottomCenter,
                   child: FractionalTranslation(
                     translation: Offset(0, translation),
@@ -1007,7 +1051,7 @@ class _SlidingSheetState extends State<SlidingSheet>
     if (scrollSpec.overscroll) {
       scrollView = GlowingOverscrollIndicator(
         axisDirection: AxisDirection.down,
-        color: scrollSpec.overscrollColor ?? Theme.of(context).accentColor,
+        color: scrollSpec.overscrollColor ?? Theme.of(context).colorScheme.secondary,
         child: scrollView,
       );
     }
@@ -1028,18 +1072,17 @@ class _SlidingSheetState extends State<SlidingSheet>
       child: widget.body,
       builder: (context, dynamic _, body) {
         final amount = spec.amount;
-        final defaultMaxExtent = snappings.length > 2
-            ? snappings[snappings.length - 2]
-            : this.maxExtent;
-        final maxExtent = spec.endExtent != null
-            ? _normalizeSnap(spec.endExtent!)
-            : defaultMaxExtent;
-        assert(maxExtent > minExtent,
-            'The endExtent must be greater than the min snap extent you set on the SnapSpec');
+        final defaultMaxExtent =
+            snappings.length > 2 ? snappings[snappings.length - 2] : this.maxExtent;
+        final maxExtent =
+            spec.endExtent != null ? _normalizeSnap(spec.endExtent!) : defaultMaxExtent;
+        assert(
+          maxExtent > minExtent,
+          'The endExtent must be greater than the min snap extent you set on the SnapSpec',
+        );
         final maxOffset = (maxExtent - minExtent) * availableHeight;
         final num fraction =
-            ((currentExtent - minExtent) / (maxExtent - minExtent))
-                .clamp(0.0, 1.0);
+            ((currentExtent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0);
 
         return Padding(
           padding: EdgeInsets.only(bottom: (amount * maxOffset) * fraction),
@@ -1054,18 +1097,14 @@ class _SlidingSheetState extends State<SlidingSheet>
       valueListenable: extent!._currentExtent,
       builder: (context, dynamic value, child) {
         final opacity = () {
-          if (!widget.isDismissable &&
-              !dismissUnderway &&
-              didCompleteInitialRoute) {
+          if (!widget.isDismissable && !dismissUnderway && didCompleteInitialRoute) {
             return 1.0;
           } else if (currentExtent != 0.0) {
             if (isDialog) {
               return (currentExtent / minExtent).clamp(0.0, 1.0);
             } else {
-              final secondarySnap =
-                  snappings.length > 2 ? snappings[1] : maxExtent;
-              return ((currentExtent - minExtent) / (secondarySnap - minExtent))
-                  .clamp(0.0, 1.0);
+              final secondarySnap = snappings.length > 2 ? snappings[1] : maxExtent;
+              return ((currentExtent - minExtent) / (secondarySnap - minExtent)).clamp(0.0, 1.0);
             }
           } else {
             return 0.0;
@@ -1084,15 +1123,16 @@ class _SlidingSheetState extends State<SlidingSheet>
           ),
         );
 
-        void onTap() => widget.isDismissable
-            ? _pop(0.0, true, false)
-            : _onDismissPrevented(backDrop: true);
+        void onTap() =>
+            widget.isDismissable ? _pop(0.0, true, false) : _onDismissPrevented(backDrop: true);
 
         // see: https://github.com/BendixMa/sliding-sheet/issues/30
         if (opacity >= 0.05 || didStartDragWhenNotCollapsed) {
           if (widget.isBackdropInteractable) {
-            return _delegateInteractions(backDrop,
-                onTap: widget.closeOnBackdropTap ? onTap : null);
+            return _delegateInteractions(
+              backDrop,
+              onTap: widget.closeOnBackdropTap ? onTap : null,
+            );
           } else if (widget.closeOnBackdropTap) {
             return GestureDetector(
               onTap: onTap,
@@ -1108,18 +1148,19 @@ class _SlidingSheetState extends State<SlidingSheet>
   }
 
   Widget _delegateInteractions(Widget child, {VoidCallback? onTap}) {
-    if (child == null) return const SizedBox();
-
     var start = 0.0, end = 0.0;
 
     void onDragEnd([double velocity = 0.0]) {
-      controller!.delegateFling(velocity);
+      controller.delegateFling(velocity);
 
       // If a header was dragged, but the scroll view is not at the top
       // animate to the top when the drag has ended.
       if (!state.isAtTop && (start - end).abs() > 15.0) {
-        controller!.animateTo(0.0,
-            duration: widget.duration * 0.5, curve: Curves.ease);
+        controller.animateTo(
+          0.0,
+          duration: widget.openDuration * 0.5,
+          curve: Curves.ease,
+        );
       }
 
       _handleNonDismissableSnapBack();
@@ -1143,7 +1184,7 @@ class _SlidingSheetState extends State<SlidingSheet>
         // sheet, only to drag it between min and max extent.
         final shouldDelegate = !delta.isNegative || currentExtent < maxExtent;
         if (shouldDelegate) {
-          controller!.delegateDrag(delta);
+          controller.delegateDrag(delta);
         }
       },
       onVerticalDragEnd: (details) {
@@ -1164,178 +1205,19 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   @override
   void dispose() {
-    controller!.dispose();
+    controller.dispose();
     super.dispose();
-  }
-}
-
-/// A data class containing state information about the [SlidingSheet]
-/// such as the extent and scroll offset.
-class SheetState {
-  /// The current extent the sheet covers.
-  final double extent;
-
-  /// The minimum extent that the sheet will cover.
-  final double minExtent;
-
-  /// The maximum extent that the sheet will cover
-  /// until it begins scrolling.
-  final double maxExtent;
-
-  /// Whether the sheet has finished measuring its children and computed
-  /// the correct extents. This takes until the first frame was drawn.
-  final bool isLaidOut;
-
-  /// The progress between [minExtent] and [maxExtent] of the current [extent].
-  /// A progress of 1 means the sheet is fully expanded, while
-  /// a progress of 0 means the sheet is fully collapsed.
-  final double progress;
-
-  /// Whether the [SlidingSheet] has reached its maximum extent.
-  final bool isExpanded;
-
-  /// Whether the [SlidingSheet] has reached its minimum extent.
-  final bool isCollapsed;
-
-  /// Whether the [SlidingSheet] has a [scrollOffset] of zero.
-  final bool isAtTop;
-
-  /// Whether the [SlidingSheet] has reached its maximum scroll extent.
-  final bool isAtBottom;
-
-  /// Whether the sheet is hidden to the user.
-  final bool isHidden;
-
-  /// Whether the sheet is visible to the user.
-  final bool isShown;
-
-  /// The scroll offset of the Scrollable inside the sheet
-  /// at the time this [SheetState] was emitted.
-  final double scrollOffset;
-
-  final _SheetExtent? _extent;
-
-  /// A data class containing state information about the [SlidingSheet]
-  /// at the time this state was emitted.
-  SheetState(
-    this._extent, {
-    required this.extent,
-    required this.isLaidOut,
-    required this.maxExtent,
-    required double minExtent,
-    // On Bottomsheets it is possible for min and maxExtents to be the same (when you only set one snap).
-    // Thus we have to account for this and set the minExtent to be zero.
-  })   : minExtent = minExtent != maxExtent ? minExtent : 0.0,
-        progress = isLaidOut
-            ? ((extent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0)
-            : 0.0,
-        isExpanded = toPrecision(extent) >= toPrecision(maxExtent),
-        isCollapsed = toPrecision(extent) <= toPrecision(minExtent),
-        isAtTop = _extent?.isAtTop ?? true,
-        isAtBottom = _extent?.isAtBottom ?? false,
-        isHidden = extent <= 0.0,
-        isShown = extent > 0.0,
-        scrollOffset = _extent?.scrollOffset ?? 0.0;
-
-  /// A default constructor which can be used to initial `ValueNotifers` for instance.
-  SheetState.inital()
-      : this(null,
-            extent: 0.0, minExtent: 0.0, maxExtent: 1.0, isLaidOut: false);
-
-  /// The current scroll offset of the [Scrollable] inside the sheet.
-  double get currentScrollOffset => _extent?.scrollOffset ?? 0.0;
-
-  /// The maximum amount the Scrollable inside the sheet can scroll.
-  double get maxScrollExtent => _extent?.maxScrollExtent ?? 0.0;
-
-  /// private
-  static ValueNotifier<SheetState> notifier(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<_InheritedSheetState>()!
-        .state;
-  }
-
-  @override
-  String toString() {
-    return 'SheetState(extent: $extent, minExtent: $minExtent, maxExtent: $maxExtent, isLaidOut: $isLaidOut, progress: $progress, scrollOffset: $scrollOffset, maxScrollExtent: $maxScrollExtent, isExpanded: $isExpanded, isCollapsed: $isCollapsed, isAtTop: $isAtTop, isAtBottom: $isAtBottom, isHidden: $isHidden, isShown: $isShown)';
   }
 }
 
 class _InheritedSheetState extends InheritedWidget {
   final ValueNotifier<SheetState> state;
+
   const _InheritedSheetState(
     this.state,
     Widget child,
   ) : super(child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSheetState oldWidget) =>
-      state != oldWidget.state;
-}
-
-/// A controller for a [SlidingSheet].
-class SheetController {
-  /// Inherit the [SheetController] from the closest [SlidingSheet].
-  ///
-  /// Every [SlidingSheet] has a [SheetController], even if you didn't assign
-  /// one explicitly. This allows you to call functions on the controller from child
-  /// widgets without having to pass a [SheetController] around.
-  static SheetController? of(BuildContext context) {
-    return context
-        .findAncestorStateOfType<_SlidingSheetState>()
-        ?.sheetController;
-  }
-
-  /// Animates the sheet to the [extent].
-  ///
-  /// The [extent] will be clamped to the minimum and maximum extent.
-  /// If the scrolling child is not at the top, it will scroll to the top
-  /// first and then animate to the specified extent.
-  Future<void>? snapToExtent(double extent,
-          {Duration? duration, bool clamp = true}) =>
-      _snapToExtent?.call(extent, duration: duration, clamp: clamp);
-  Future<void> Function(double extent, {Duration? duration, bool? clamp})?
-      _snapToExtent;
-
-  /// Animates the scrolling child to a specified offset.
-  ///
-  /// If the sheet is not fully expanded it will expand first and then
-  /// animate to the given [offset].
-  Future<void>? scrollTo(double offset, {Duration? duration, Curve? curve}) =>
-      _scrollTo?.call(offset, duration: duration, curve: curve);
-  Future<void> Function(double offset, {Duration? duration, Curve? curve})?
-      _scrollTo;
-
-  /// Calls every builder function of the sheet to rebuild the widgets with
-  /// the current [SheetState].
-  ///
-  /// This function can be used to reflect changes on the [SlidingSheet]
-  /// without calling `setState(() {})` on the parent widget if that would be
-  /// too expensive.
-  void rebuild() => _rebuild?.call();
-  VoidCallback? _rebuild;
-
-  /// Fully collapses the sheet.
-  ///
-  /// Short-hand for calling `snapToExtent(minExtent)`.
-  Future<void>? collapse() => _collapse?.call();
-  Future<void> Function()? _collapse;
-
-  /// Fully expands the sheet.
-  ///
-  /// Short-hand for calling `snapToExtent(maxExtent)`.
-  Future<void>? expand() => _expand?.call();
-  Future<void> Function()? _expand;
-
-  /// Reveals the [SlidingSheet] if it is currently hidden.
-  Future<void>? show() => _show?.call();
-  Future<void> Function()? _show;
-
-  /// Slides the sheet off to the bottom and hides it.
-  Future<void>? hide() => _hide?.call();
-  Future<void> Function()? _hide;
-
-  /// The current [SheetState] of this [SlidingSheet].
-  SheetState? get state => _state;
-  SheetState? _state;
+  bool updateShouldNotify(_InheritedSheetState oldWidget) => state != oldWidget.state;
 }
