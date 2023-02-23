@@ -57,8 +57,9 @@ class SheetState {
     // On Bottomsheets it is possible for min and maxExtents to be the same (when you only set one snap).
     // Thus we have to account for this and set the minExtent to be zero.
   })  : minExtent = minExtent != maxExtent ? minExtent : 0.0,
-        progress =
-            isLaidOut ? ((extent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0) : 0.0,
+        progress = isLaidOut
+            ? ((extent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0)
+            : 0.0,
         isExpanded = toPrecision(extent) >= toPrecision(maxExtent),
         isCollapsed = toPrecision(extent) <= toPrecision(minExtent),
         isAtTop = _extent?.isAtTop ?? true,
@@ -85,7 +86,9 @@ class SheetState {
 
   /// private
   static ValueNotifier<SheetState> notifier(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_InheritedSheetState>()!.state;
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedSheetState>()!
+        .state;
   }
 
   @override

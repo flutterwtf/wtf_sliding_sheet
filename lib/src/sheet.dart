@@ -25,7 +25,8 @@ typedef SheetBuilder = Widget Function(BuildContext context, SheetState state);
 typedef SheetListener = void Function(SheetState state);
 
 /// Callback prevented dismiss the dialog
-typedef OnDismissPreventedCallback = void Function(bool backButton, bool backDrop);
+typedef OnDismissPreventedCallback = void Function(
+    bool backButton, bool backDrop);
 
 /// Callback for opening sheet
 typedef OnOpenCallback = void Function();
@@ -398,7 +399,8 @@ class SlidingSheet extends StatefulWidget {
   _SlidingSheetState createState() => _SlidingSheetState();
 }
 
-class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMixin {
+class _SlidingSheetState extends State<SlidingSheet>
+    with TickerProviderStateMixin {
   final GlobalKey childKey = GlobalKey();
   final GlobalKey headerKey = GlobalKey();
   final GlobalKey footerKey = GlobalKey();
@@ -433,14 +435,19 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
 
   // The total height of all sheet components.
   double get sheetHeight =>
-      childHeight + headerHeight + footerHeight + padding.vertical + borderHeight;
+      childHeight +
+      headerHeight +
+      footerHeight +
+      padding.vertical +
+      borderHeight;
 
   // The maxiumum height that this sheet will cover.
   double get maxHeight => math.min(sheetHeight, availableHeight);
 
   bool get isScrollable => sheetHeight >= availableHeight;
 
-  double get currentExtent => (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
+  double get currentExtent =>
+      (extent?.currentExtent ?? minExtent).clamp(0.0, 1.0);
 
   set currentExtent(double value) => extent?.currentExtent = value;
 
@@ -456,8 +463,9 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
 
   double get maxExtent => snappings.last.clamp(0.0, 1.0);
 
-  double get initialExtent =>
-      snapSpec.initialSnap != null ? _normalizeSnap(snapSpec.initialSnap!) : minExtent;
+  double get initialExtent => snapSpec.initialSnap != null
+      ? _normalizeSnap(snapSpec.initialSnap!)
+      : minExtent;
 
   bool get isDialog => widget.route != null;
 
@@ -510,7 +518,8 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
       );
 
   // A notifier that a child SheetListenableBuilder can inherit to
-  final ValueNotifier<SheetState> stateNotifier = ValueNotifier(SheetState.inital());
+  final ValueNotifier<SheetState> stateNotifier =
+      ValueNotifier(SheetState.inital());
 
   @override
   void initState() {
@@ -594,9 +603,12 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
   // Measure the height of all sheet components.
   void _measure() {
     postFrame(() {
-      final RenderBox? child = childKey.currentContext?.findRenderObject() as RenderBox?;
-      final RenderBox? header = headerKey.currentContext?.findRenderObject() as RenderBox?;
-      final RenderBox? footer = footerKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? child =
+          childKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? header =
+          headerKey.currentContext?.findRenderObject() as RenderBox?;
+      final RenderBox? footer =
+          footerKey.currentContext?.findRenderObject() as RenderBox?;
 
       final isChildLaidOut = child?.hasSize == true;
       final prevChildHeight = childHeight;
@@ -811,7 +823,8 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
       snapToExtent(0.0, velocity: velocity);
     } else if (!isDialog) {
       final num fractionCovered =
-          ((currentExtent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0);
+          ((currentExtent - minExtent) / (maxExtent - minExtent))
+              .clamp(0.0, 1.0);
       final timeFraction = 1.0 - (fractionCovered * 0.5);
       snapToExtent(
         minExtent,
@@ -824,11 +837,14 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
   // Ensure that the sheet sizes itself correctly when the
   // constraints change.
   void _adjustSnapForIncomingConstraints(double previousHeight) {
-    if (previousHeight > 0.0 && previousHeight != availableHeight && state.isShown) {
+    if (previousHeight > 0.0 &&
+        previousHeight != availableHeight &&
+        state.isShown) {
       _updateSnappingsAndExtent();
 
       final num changeAdjustedExtent =
-          ((currentExtent * previousHeight) / availableHeight).clamp(minExtent, maxExtent);
+          ((currentExtent * previousHeight) / availableHeight)
+              .clamp(minExtent, maxExtent);
 
       final isAroundFixedSnap = snappings.any(
         (snap) => (snap - changeAdjustedExtent).abs() < 0.01,
@@ -981,7 +997,9 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
             builder: (context, dynamic extent, sheet) {
               final translation = () {
                 if (headerFooterExtent > 0.0) {
-                  return 1.0 - (currentExtent.clamp(0.0, headerFooterExtent) / headerFooterExtent);
+                  return 1.0 -
+                      (currentExtent.clamp(0.0, headerFooterExtent) /
+                          headerFooterExtent);
                 } else {
                   return 0.0;
                 }
@@ -990,7 +1008,9 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
               return Invisible(
                 invisible: !isLaidOut || currentExtent == 0.0,
                 child: FractionallySizedBox(
-                  heightFactor: isLaidOut ? currentExtent.clamp(headerFooterExtent, 1.0) : 1.0,
+                  heightFactor: isLaidOut
+                      ? currentExtent.clamp(headerFooterExtent, 1.0)
+                      : 1.0,
                   alignment: Alignment.bottomCenter,
                   child: FractionalTranslation(
                     translation: Offset(0, translation),
@@ -1051,7 +1071,8 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
     if (scrollSpec.overscroll) {
       scrollView = GlowingOverscrollIndicator(
         axisDirection: AxisDirection.down,
-        color: scrollSpec.overscrollColor ?? Theme.of(context).colorScheme.secondary,
+        color: scrollSpec.overscrollColor ??
+            Theme.of(context).colorScheme.secondary,
         child: scrollView,
       );
     }
@@ -1072,17 +1093,20 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
       child: widget.body,
       builder: (context, dynamic _, body) {
         final amount = spec.amount;
-        final defaultMaxExtent =
-            snappings.length > 2 ? snappings[snappings.length - 2] : this.maxExtent;
-        final maxExtent =
-            spec.endExtent != null ? _normalizeSnap(spec.endExtent!) : defaultMaxExtent;
+        final defaultMaxExtent = snappings.length > 2
+            ? snappings[snappings.length - 2]
+            : this.maxExtent;
+        final maxExtent = spec.endExtent != null
+            ? _normalizeSnap(spec.endExtent!)
+            : defaultMaxExtent;
         assert(
           maxExtent > minExtent,
           'The endExtent must be greater than the min snap extent you set on the SnapSpec',
         );
         final maxOffset = (maxExtent - minExtent) * availableHeight;
         final num fraction =
-            ((currentExtent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0);
+            ((currentExtent - minExtent) / (maxExtent - minExtent))
+                .clamp(0.0, 1.0);
 
         return Padding(
           padding: EdgeInsets.only(bottom: (amount * maxOffset) * fraction),
@@ -1097,14 +1121,18 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
       valueListenable: extent!._currentExtent,
       builder: (context, dynamic value, child) {
         final opacity = () {
-          if (!widget.isDismissable && !dismissUnderway && didCompleteInitialRoute) {
+          if (!widget.isDismissable &&
+              !dismissUnderway &&
+              didCompleteInitialRoute) {
             return 1.0;
           } else if (currentExtent != 0.0) {
             if (isDialog) {
               return (currentExtent / minExtent).clamp(0.0, 1.0);
             } else {
-              final secondarySnap = snappings.length > 2 ? snappings[1] : maxExtent;
-              return ((currentExtent - minExtent) / (secondarySnap - minExtent)).clamp(0.0, 1.0);
+              final secondarySnap =
+                  snappings.length > 2 ? snappings[1] : maxExtent;
+              return ((currentExtent - minExtent) / (secondarySnap - minExtent))
+                  .clamp(0.0, 1.0);
             }
           } else {
             return 0.0;
@@ -1123,8 +1151,9 @@ class _SlidingSheetState extends State<SlidingSheet> with TickerProviderStateMix
           ),
         );
 
-        void onTap() =>
-            widget.isDismissable ? _pop(0.0, true, false) : _onDismissPrevented(backDrop: true);
+        void onTap() => widget.isDismissable
+            ? _pop(0.0, true, false)
+            : _onDismissPrevented(backDrop: true);
 
         // see: https://github.com/BendixMa/sliding-sheet/issues/30
         if (opacity >= 0.05 || didStartDragWhenNotCollapsed) {
@@ -1219,5 +1248,6 @@ class _InheritedSheetState extends InheritedWidget {
   ) : super(child: child);
 
   @override
-  bool updateShouldNotify(_InheritedSheetState oldWidget) => state != oldWidget.state;
+  bool updateShouldNotify(_InheritedSheetState oldWidget) =>
+      state != oldWidget.state;
 }

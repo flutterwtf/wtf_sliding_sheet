@@ -8,7 +8,9 @@ class SheetController {
   /// one explicitly. This allows you to call functions on the controller from child
   /// widgets without having to pass a [SheetController] around.
   static SheetController? of(BuildContext context) {
-    return context.findAncestorStateOfType<_SlidingSheetState>()?.sheetController;
+    return context
+        .findAncestorStateOfType<_SlidingSheetState>()
+        ?.sheetController;
   }
 
   /// Animates the sheet to the [extent].
