@@ -12,7 +12,7 @@ dependencies:
   charts_flutter: ^0.8.1
   material_design_icons_flutter: ^4.0.5045
   
-  sliding_sheet:
+  wtf_sliding_sheet:
     path: ../
 
 dev_dependencies:
