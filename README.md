@@ -13,7 +13,7 @@ Click [here](https://github.com/bnxm/sliding_sheet/blob/master/example/lib/main.
 Add it to your `pubspec.yaml` file:
 ```yaml
 dependencies:
-  sliding_sheet: ^0.5.0
+  wtf_sliding_sheet: ^0.6.0
 ```
 Install packages from the command line
 ```
