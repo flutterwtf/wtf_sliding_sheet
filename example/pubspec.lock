@@ -29,18 +29,18 @@ packages:
     dependency: transitive
     description:
       name: charts_common
-      sha256: c5fe2078107211b563c11193dfb5c0c4fe263911941cff900eda816c7f963e49
+      sha256: "7b8922f9b0d9b134122756a787dab1c3946ae4f3fc5022ff323ba0014998ea02"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.1"
+    version: "0.12.0"
   charts_flutter:
     dependency: "direct main"
     description:
       name: charts_flutter
-      sha256: b202fb13e7067d372dd735597cee690a6d97107cf3572b00d3d71300c336b0aa
+      sha256: "4172c3f4b85322fdffe1896ffbed79ae4689ae72cb6fe6690dcaaea620a9c558"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.1"
+    version: "0.12.0"
   clock:
     dependency: transitive
     description:
@@ -70,6 +70,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_lints:
+    dependency: "direct dev"
+    description:
+      name: flutter_lints
+      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -91,14 +99,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.5"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   logging:
     dependency: transitive
     description:
       name: logging
-      sha256: "0520a4826042a8a5d09ddd4755623a50d37ee536d79a70452aff8c8ad7bb6c27"
+      sha256: "04094f2eb032cbb06c6f6e8d3607edcfcb0455e2bb6cbc010cb01171dcb64e6d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.1"
   matcher:
     dependency: transitive
     description:
@@ -119,10 +135,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_design_icons_flutter
-      sha256: "6b527ea0ef01b9b702e3b8252cf27ca9ddc759777ea1a0483ec973e002f6386a"
+      sha256: "8ef8562d16e747b2d93e5da5c2508931588939c5c00ebc8e2768e803db7dfd3c"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.5045"
+    version: "6.0.7096"
   meta:
     dependency: transitive
     description:
@@ -144,13 +160,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sliding_sheet:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.5.0"
   source_span:
     dependency: transitive
     description:
@@ -207,6 +216,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  wtf_sliding_sheet:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.6.0"
 sdks:
-  dart: ">=2.18.0 <3.0.0"
-  flutter: ">=0.1.2"
+  dart: ">=2.19.0 <3.0.0"
+  flutter: ">=2.5.0"
