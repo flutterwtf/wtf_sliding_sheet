@@ -2,30 +2,35 @@
 
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
-<a href="https://github.com/bnxm/sliding_sheet/blob/master/example/lib/main.dart">
-  <img width="205px" alt="Example of a SlidingSheet" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example.gif"/>
+<a href="https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart">
+  <img width="205px" alt="Example of a SlidingSheet" src="images/example_preview.gif"/>
 </a>
 
-Click [here](https://github.com/bnxm/sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
+Click [here](https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
+
+The package is a fork of [this](https://github.com/tchigher/sliding-sheet) repository.
 
 ## Installing
 
 Add it to your `pubspec.yaml` file:
+
 ```yaml
 dependencies:
   wtf_sliding_sheet: ^0.6.0
 ```
+
 Install packages from the command line
-```
+
+```shell
 flutter packages get
 ```
 
-If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/bnxm/sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/sliding_sheet) :heart:
+If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/flutterwtf/sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
 
 ## Usage
 
 There are two ways in which you can use a `SlidingSheet`: either as a permanent (or persistent) `Widget` in your
-widget tree or as a `BottomSheetDialog`. 
+widget tree or as a `BottomSheetDialog`.
 
 ### As a Widget
 
@@ -72,15 +77,16 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### Result:
-<img width="205px" alt="Example" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/usage_example.gif" href/>
+**Result:**
+
+<img width="205px" alt="Example" src="images/example_as_a_widget.gif"/>
 
 ### As a BottomSheetDialog
 
 This method can be used to show a `SlidingSheet` as a `BottomSheetDialog` by calling the `showSlidingBottomSheet` function and returning and instance of `SlidingSheetDialog`.
 
 ```dart
-void showAsBottomSheet() async {
+void showAsBottomSheet(BuildContext context) async {
   final result = await showSlidingBottomSheet(
     context,
     builder: (context) {
@@ -103,7 +109,7 @@ void showAsBottomSheet() async {
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       'This is the content of the sheet',
-                      style: Theme.of(context).textTheme.body1,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -118,15 +124,16 @@ void showAsBottomSheet() async {
   print(result); // This is the result.
 }
 ```
-#### Result:
-<img width="205px" alt="Example" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/usage_example_bottom_sheet.gif"/>
+
+**Result:**
+<img width="205px" alt="Example" src="images/example_as_a_bottom_sheet_dialog.gif"/>
 
 ### Snapping
 
 A `SlidingSheet` can snap to multiple extents or to no at all. You can customize the snapping behavior by
 passing an instance of `SnapSpec` to the `SlidingSheet`.
 
- Parameter | Description 
+ Parameter | Description
 --- | ---
 snap | If true, the `SlidingSheet` will snap to the provided `snappings`. If false, the `SlidingSheet` will slide from minExtent to maxExtent and then begin to scroll, if the content is bigger than the available height.
 snappings | The extents that the `SlidingSheet` will snap to, when the user ends a drag interaction. The minimum and maximum values will represent the bounds in which the `SlidingSheet` will slide until it reaches the maximum from which on it will scroll.
@@ -134,19 +141,19 @@ positioning | Can be set to one of these three values: `SnapPositioning.relative
 onSnap | A callback function that gets invoked when the `SlidingSheet` snaps to an extent.
 
 <p float="left">
-  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example_snapping_relativeToAvailableSpace.png"/>
-  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example_snapping_relativeToSheetHeight.png"/>
-  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example_snapping_pixelOffset.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="images/example_snap_relative_to_space.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="images/example_snap_relative_to_height.png"/>
+  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="images/example_snap_to_pixel_offset.png"/>
 </p>
 
 There are also some prebuild snaps you can facilitate to snap for example to headers or footers as shown in the example.
 
- Snap | Description 
+ Snap | Description
 --- | ---
-SnapSpec.headerFooterSnap | The snap extent that makes header and footer fully visible without account for vertical padding on the `SlidingSheet`.
-SnapSpec.headerSnap | The snap extent that makes the header fully visible without account for top padding on the `SlidingSheet`.
-SnapSpec.footerSnap | The snap extent that makes the footer fully visible without account for bottom padding on the `SlidingSheet`.
-SnapSpec.expanded | The snap extent that expands the whole `SlidingSheet`.
+`SnapSpec.headerFooterSnap` | The snap extent that makes header and footer fully visible without account for vertical padding on the `SlidingSheet`.
+`SnapSpec.headerSnap` | The snap extent that makes the header fully visible without account for top padding on the `SlidingSheet`.
+`SnapSpec.footerSnap` | The snap extent that makes the footer fully visible without account for bottom padding on the `SlidingSheet`.
+`SnapSpec.expanded` | The snap extent that expands the whole `SlidingSheet`.
 
 ### SheetController
 
@@ -154,7 +161,7 @@ The `SheetController` can be used to change the state of a `SlidingSheet` manual
 
 Note that you can also use the static `SheetController.of(context)` method to obtain an instance of the `SheetController` of the closest `SlidingSheet`. This also works if you didn't assign a `SheetController` explicitly on the `SlidingSheet`.
 
- Method | Description 
+ Method | Description
 --- | ---
 `expand()` | Expands the `SlidingSheet` to the maximum extent.
 `collapse()` | Collapses the `SlidingSheet` to the minimum extent.
@@ -192,7 +199,7 @@ Widget build(BuildContext context) {
               child: Center(
                 child: Text(
                   'This is the content of the sheet',
-                  style: Theme.of(context).textTheme.body1,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             );
@@ -205,7 +212,7 @@ Widget build(BuildContext context) {
               alignment: Alignment.center,
               child: Text(
                 'This is the header',
-                style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.bodyMedium.copyWith(color: Colors.white),
               ),
             );
           },
@@ -217,7 +224,7 @@ Widget build(BuildContext context) {
               alignment: Alignment.center,
               child: Text(
                 'This is the footer',
-                style: Theme.of(context).textTheme.body1.copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyMedium.copyWith(color: Colors.black),
               ),
             );
           },
@@ -227,8 +234,9 @@ Widget build(BuildContext context) {
   );
 }
 ```
-#### Result:
-<img width="205px" alt="Simple header/footer example" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example_header_footer.gif"/>
+
+**Result:**
+<img width="205px" alt="Simple header/footer example" src="images/example_header_footer.gif"/>
 
 ### ListViews and Columns
 
@@ -240,22 +248,32 @@ In order to change the UI when the sheet gets interacted with, you can pass a ca
 
 For rebuilding individual children of a `SlidingSheet` (e.g. elevating the header when content gets scrolled under it), you can also use the `SheetListenerBuilder`:
 
-~~~dart
+```dart
 return SheetListenerBuilder(
   // buildWhen can be used to only rebuild the widget when needed.
-  buildWhen: (oldState, newState) => oldState.isAtTop != newState.isAtTop,
-  builder: (context, state) {
-    return AnimatedContainer(
-      elevation: !state.isAtTop ? elevation : 0.0,
-      duration: const Duration(milliseconds: 400),
-      child: child,
+  buildWhen: (oldState, newState) =>
+    oldState.progress != newState.progress,
+  builder: (context, SheetState state) {
+    return Material(
+      elevation: state.progress * 20 + 1,
+      color: Colors.lightBlue,
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(16),
+      ),
+      child: SizedBox(
+        height: 60,
+        child: Center(
+          child: const Text('Header'),
+        ),
+      ),
     );
   },
 );
-~~~
+```
 
-The example for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
+**Result:**
+<img width="205px" alt="Example of Material Effects" src="images/example_material_effects.gif"/>
+
+The [example](https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
 
 Because these are common Material behaviors, `SlidingSheet` supports those out of the box, which can be achieved by setting the `avoidStatusBar` field to `true`, `cornerRadiusOnFullscreen` to `0` and `liftOnScrollHeaderElevation` to the elevation.
-
-<img width="205px" alt="Example of Material Effects" src="https://raw.githubusercontent.com/bnxm/sliding_sheet/master/assets/example_reflecting_changes.gif"/>
