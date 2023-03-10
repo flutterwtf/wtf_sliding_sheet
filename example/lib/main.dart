@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart'
+    as charts;
 import 'package:example/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
