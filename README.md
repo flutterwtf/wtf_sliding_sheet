@@ -126,6 +126,7 @@ void showAsBottomSheet(BuildContext context) async {
 ```
 
 **Result:**
+
 <img width="205px" alt="Example" src="images/example_as_a_bottom_sheet_dialog.gif"/>
 
 ### Snapping
@@ -236,6 +237,7 @@ Widget build(BuildContext context) {
 ```
 
 **Result:**
+
 <img width="205px" alt="Simple header/footer example" src="images/example_header_footer.gif"/>
 
 ### ListViews and Columns
@@ -272,6 +274,7 @@ return SheetListenerBuilder(
 ```
 
 **Result:**
+
 <img width="205px" alt="Example of Material Effects" src="images/example_material_effects.gif"/>
 
 The [example](https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
