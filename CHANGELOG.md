@@ -1,3 +1,9 @@
+## 0.6.0
+* **Various** fixes and improvements
+* **Migrated** to Sound null safety
+* **Added** `SheetController`
+* **Added** `SimpleBounceOut`
+
 ## 0.5.0
 * **Added** NNBD support
 * **Fixed** #70
