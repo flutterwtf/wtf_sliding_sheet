@@ -2,11 +2,11 @@
 
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
-<a href="https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart">
+<a href="https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart">
   <img width="205px" alt="Example of a SlidingSheet" src="images/example_preview.gif"/>
 </a>
 
-Click [here](https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
+Click [here](https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
 
 The package is a fork of [this](https://github.com/tchigher/sliding-sheet) repository.
 
@@ -25,7 +25,7 @@ Install packages from the command line
 flutter packages get
 ```
 
-If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/flutterwtf/sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
+If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/flutterwtf/wtf_sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
 
 ## Usage
 
@@ -277,6 +277,6 @@ return SheetListenerBuilder(
 
 <img width="205px" alt="Example of Material Effects" src="images/example_material_effects.gif"/>
 
-The [example](https://github.com/flutterwtf/sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
+The [example](https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
 
 Because these are common Material behaviors, `SlidingSheet` supports those out of the box, which can be achieved by setting the `avoidStatusBar` field to `true`, `cornerRadiusOnFullscreen` to `0` and `liftOnScrollHeaderElevation` to the elevation.
