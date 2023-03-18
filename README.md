@@ -3,7 +3,7 @@
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
 <a href="https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart">
-  <img width="205px" alt="Example of a SlidingSheet" src="images/example_preview.gif"/>
+  <img width="205px" alt="Example of a SlidingSheet" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_preview.gif"/>
 </a>
 
 Click [here](https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
@@ -79,7 +79,7 @@ Widget build(BuildContext context) {
 
 **Result:**
 
-<img width="205px" alt="Example" src="images/example_as_a_widget.gif"/>
+<img width="205px" alt="Example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_as_a_widget.gif"/>
 
 ### As a BottomSheetDialog
 
@@ -127,7 +127,7 @@ void showAsBottomSheet(BuildContext context) async {
 
 **Result:**
 
-<img width="205px" alt="Example" src="images/example_as_a_bottom_sheet_dialog.gif"/>
+<img width="205px" alt="Example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_as_a_bottom_sheet_dialog.gif"/>
 
 ### Snapping
 
@@ -142,9 +142,9 @@ positioning | Can be set to one of these three values: `SnapPositioning.relative
 onSnap | A callback function that gets invoked when the `SlidingSheet` snaps to an extent.
 
 <p float="left">
-  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="images/example_snap_relative_to_space.png"/>
-  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="images/example_snap_relative_to_height.png"/>
-  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="images/example_snap_to_pixel_offset.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_relative_to_space.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_relative_to_height.png"/>
+  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_to_pixel_offset.png"/>
 </p>
 
 There are also some prebuild snaps you can facilitate to snap for example to headers or footers as shown in the example.
@@ -238,7 +238,7 @@ Widget build(BuildContext context) {
 
 **Result:**
 
-<img width="205px" alt="Simple header/footer example" src="images/example_header_footer.gif"/>
+<img width="205px" alt="Simple header/footer example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_header_footer.gif"/>
 
 ### ListViews and Columns
 
@@ -275,7 +275,7 @@ return SheetListenerBuilder(
 
 **Result:**
 
-<img width="205px" alt="Example of Material Effects" src="images/example_material_effects.gif"/>
+<img width="205px" alt="Example of Material Effects" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_material_effects.gif"/>
 
 The [example](https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
 
