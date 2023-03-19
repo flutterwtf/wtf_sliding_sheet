@@ -1,6 +1,6 @@
 name: wtf_sliding_sheet
 description: A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
-version: 0.6.0
+version: 0.6.1
 homepage: https://pub.dev/packages/wtf_sliding_sheet
 repository: https://github.com/flutterwtf/wtf_sliding_sheet
 

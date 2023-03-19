@@ -1,3 +1,6 @@
+## 0.6.1
+* **Migrate** to a new repository name
+
 ## 0.6.0
 * **Various** fixes and improvements
 * **Migrated** to Sound null safety
