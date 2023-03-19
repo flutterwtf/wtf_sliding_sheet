@@ -16,13 +16,13 @@ Add it to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  wtf_sliding_sheet: ^0.6.0
+  wtf_sliding_sheet: ^0.6.1
 ```
 
 Install packages from the command line
 
 ```shell
-flutter packages get
+flutter pub get
 ```
 
 If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/flutterwtf/wtf_sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
