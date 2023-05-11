@@ -1,4 +1,4 @@
-## 0.6.2
+## 1.0.0
 * **Fixed** [#7](https://github.com/flutterwtf/wtf_sliding_sheet/pull/7)
 * **Added** flutter 3.10 support
 * **Added** dart 3 support
