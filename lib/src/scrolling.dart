@@ -82,7 +82,11 @@ class _SlidingSheetScrollController extends ScrollController {
 
   _SheetExtent get extent => sheet.extent!;
 
-  void Function(double, bool, bool) get onPop => sheet._pop;
+  void Function({
+    required double velocity,
+    required bool isBackDrop,
+    required bool isBackButton,
+  }) get onPop => sheet._pop;
 
   Duration get duration => sheet.widget.openDuration;
 
@@ -238,7 +242,11 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
 
   _SlidingSheetState get sheet => scrollController.sheet;
 
-  void Function(double, bool, bool) get onPop => scrollController.onPop;
+  void Function({
+    required double velocity,
+    required bool isBackDrop,
+    required bool isBackButton,
+  }) get onPop => scrollController.onPop;
 
   SnapSpec get snapBehavior => sheet.snapSpec;
 
@@ -383,7 +391,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       if (!isMovingUp) {
         if (isDismissable) {
           // Pop from the navigator on down fling.
-          onPop(velocity, false, false);
+          onPop(velocity: velocity, isBackDrop: false, isBackButton: false);
         } else {
           snapTo(minExtent);
         }
@@ -432,7 +440,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       }
 
       if (targetSnap == 0.0) {
-        onPop(velocity, false, false);
+        onPop(velocity: velocity, isBackDrop: false, isBackButton: false);
       } else if (targetSnap != extent.currentExtent && currentExtent > 0) {
         final double initialSnap =
             (snapBehavior.initialSnap ?? 0.0) / snapBehavior.maxSnap;
@@ -460,7 +468,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     final simulation = ClampingScrollSimulation(
       position: currentExtent,
       velocity: velocity,
-      tolerance: physics.tolerance,
+      tolerance: physics.toleranceFor(scrollController.position),
       friction: friction,
     );
 
@@ -486,7 +494,8 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
         // we just "bounce" off the top making it look like the list doesn't
         // have more to scroll.
         velocity = ballisticController.velocity +
-            (physics.tolerance.velocity * ballisticController.velocity.sign);
+            (physics.toleranceFor(scrollController.position).velocity *
+                ballisticController.velocity.sign);
         super.goBallistic(shouldMakeSheetNonDismissable ? 0.0 : velocity);
         ballisticController.stop();
 
@@ -494,7 +503,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
         if (fromBottomSheet &&
             currentExtent <= 0.0 &&
             !shouldMakeSheetNonDismissable) {
-          onPop(0.0, false, false);
+          onPop(velocity: 0.0, isBackDrop: false, isBackButton: false);
         }
       }
     }

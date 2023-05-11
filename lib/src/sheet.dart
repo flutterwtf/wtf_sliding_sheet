@@ -23,7 +23,7 @@ typedef SheetListener = void Function(SheetState state);
 
 /// Callback prevented dismiss the dialog
 typedef OnDismissPreventedCallback = void Function(
-    bool backButton, bool backDrop);
+    {required bool backButton, required bool backDrop});
 
 /// Callback for opening sheet
 typedef OnOpenCallback = void Function();
@@ -821,7 +821,10 @@ class _SlidingSheetState extends State<SlidingSheet>
     }
   }
 
-  void _pop(double velocity, bool isBackDrop, bool isBackButton) {
+  void _pop(
+      {required double velocity,
+      required bool isBackDrop,
+      required bool isBackButton}) {
     if (isDialog && !dismissUnderway && Navigator.canPop(context)) {
       dismissUnderway = true;
       Navigator.pop(context);
@@ -865,7 +868,7 @@ class _SlidingSheetState extends State<SlidingSheet>
   }
 
   void _onDismissPrevented({bool backButton = false, bool backDrop = false}) {
-    widget.onDismissPrevented?.call(backButton, backDrop);
+    widget.onDismissPrevented?.call(backButton: backButton, backDrop: backDrop);
   }
 
   void _handleNonDismissableSnapBack() {
@@ -934,7 +937,7 @@ class _SlidingSheetState extends State<SlidingSheet>
             if (widget.onDismissPrevented != null) {
               _onDismissPrevented(backButton: true);
             } else {
-              _pop(0.0, false, true);
+              _pop(velocity: 0.0, isBackDrop: false, isBackButton: true);
             }
             return false;
           } else {
@@ -1157,7 +1160,7 @@ class _SlidingSheetState extends State<SlidingSheet>
         );
 
         void onTap() => widget.isDismissable
-            ? _pop(0.0, true, false)
+            ? _pop(velocity: 0.0, isBackDrop: true, isBackButton: false)
             : _onDismissPrevented(backDrop: true);
 
         // see: https://github.com/BendixMa/sliding-sheet/issues/30
