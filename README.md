@@ -1,5 +1,29 @@
 # Sliding Sheet
 
+<p align="center">
+  <a href="https://flutter.wtf/">
+    <img alt="What the Flutter" src="https://static.tildacdn.com/tild6330-3461-4139-a163-666435336663/Group_13.svg" height=140/>
+  </a>
+</p>
+
+<p align="center">
+  <h3 align="center">Crafted with passion by
+    <a href="https://flutter.wtf/">
+    What the Flutter
+    </a> 🦜
+  </h3>
+</p>
+
+<p align="center">
+  <a href="https://pub.dev/packages/wtf_sliding_sheet">
+    <img alt="Pub" src="https://img.shields.io/pub/v/wtf_sliding_sheet?color=orange" />
+  </a>
+  <a href="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml">
+    <img alt="Build Status" src="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml/badge.svg"/>
+  </a>
+
+---
+
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
 <a href="https://github.com/What-the-Flutter/wtf_sliding_sheet/blob/master/example/lib/main.dart">
