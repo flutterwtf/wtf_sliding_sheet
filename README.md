@@ -21,6 +21,10 @@
   <a href="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml">
     <img alt="Build Status" src="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml/badge.svg"/>
   </a>
+  <a href="https://www.codefactor.io/repository/github/what-the-flutter/wtf_sliding_sheet/overview/master">
+    <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/what-the-flutter/wtf_sliding_sheet/badge/master"/>
+  </a>
+</p>
 
 ---
 
