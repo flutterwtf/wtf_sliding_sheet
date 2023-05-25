@@ -308,3 +308,22 @@ return SheetListenerBuilder(
 The [example](https://github.com/What-the-Flutter/wtf_sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
 
 Because these are common Material behaviors, `SlidingSheet` supports those out of the box, which can be achieved by setting the `avoidStatusBar` field to `true`, `cornerRadiusOnFullscreen` to `0` and `liftOnScrollHeaderElevation` to the elevation.
+
+### Use cases
+
+**Scrollable content**
+
+![lifely_stories_bottom_sheet](https://github.com/What-the-Flutter/wtf_sliding_sheet/assets/94079414/67c4d178-02a5-4a3c-a447-6baadd1d144c)
+
+The GIF above showcases the user experience when dealing with scrollable content. With our package, you can easily implement a smooth and intuitive sliding sheet that seamlessly integrates with your application.
+
+---
+
+**Confirmation sheet**
+
+![lifely_confimation_sheet](https://github.com/What-the-Flutter/wtf_sliding_sheet/assets/94079414/bdf1865b-73f2-4f80-a82b-4abe82a3705f)
+
+One of the simplest use cases is implementing easy confirmations within your application. The GIF above demonstrates it in action. With our package, you can effortlessly implement a sliding sheet that provides a smooth and intuitive confirmation experience.
+Whether it's deleting a file, confirming a purchase, or accepting a prompt, the sliding sheet offers a straightforward and user-friendly approach.
+
+
