@@ -264,6 +264,11 @@ class SlidingSheet extends StatefulWidget {
   /// The `builder` callback is used to build the main content of the sheet that
   /// will be scrolled if the content is bigger than the height that the sheet can expand to.
   ///
+  /// The `customBuilder` callback is used to build such the main content like
+  /// infinite lists that cannot be shrinkWrapped.
+  ///
+  /// Either the `builder` or the `customBuilder` must be specified.
+  ///
   /// The `headerBuilder` and `footerBuilder` can be used to build persistent widget on top
   /// and bottom respectively, that wont be scrolled but will delegate the interactions on
   /// them to the sheet.
@@ -395,7 +400,10 @@ class SlidingSheet extends StatefulWidget {
     this.isDismissable = true,
     this.onDismissPrevented,
     this.onOpen,
-  })  : assert(builder != null || customBuilder != null),
+  })  :
+
+        /// Checking whether one of the `builder` and `customBuilder` is specified.
+        assert(builder != null || customBuilder != null),
         assert(builder == null || customBuilder == null),
         assert(
           snapSpec.snappings.length >= 2,
