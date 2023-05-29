@@ -44,7 +44,7 @@ Add it to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  wtf_sliding_sheet: ^1.0.0
+  wtf_sliding_sheet: ^1.1.0
 ```
 
 Install packages from the command line
