@@ -72,6 +72,7 @@ Future<T?> showSlidingBottomSheet<T>(
               cornerRadiusOnFullscreen: dialog.cornerRadiusOnFullscreen,
               closeOnBackdropTap: dialog.dismissOnBackdropTap,
               builder: dialog.builder,
+              customBuilder: dialog.customBuilder,
               headerBuilder: dialog.headerBuilder,
               footerBuilder: dialog.footerBuilder,
               listener: dialog.listener,
@@ -114,7 +115,10 @@ Future<T?> showSlidingBottomSheet<T>(
 /// A wrapper class to show a [SlidingSheet] as a bottom sheet dialog.
 class SlidingSheetDialog {
   /// {@macro sliding_sheet.builder}
-  final SheetBuilder builder;
+  final SheetBuilder? builder;
+
+  /// {@macro sliding_sheet.customBuilder}
+  final CustomSheetBuilder? customBuilder;
 
   /// {@macro sliding_sheet.headerBuilder}
   final SheetBuilder? headerBuilder;
@@ -200,7 +204,8 @@ class SlidingSheetDialog {
 
   /// Creates a wrapper class to show a [SlidingSheet] as a bottom sheet dialog.
   const SlidingSheetDialog({
-    required this.builder,
+    this.builder,
+    this.customBuilder,
     this.headerBuilder,
     this.footerBuilder,
     this.snapSpec = const SnapSpec(),

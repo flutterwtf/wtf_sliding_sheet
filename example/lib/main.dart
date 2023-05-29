@@ -493,7 +493,7 @@ class _ExampleState extends State<Example> {
           isDismissable: isDismissable,
           dismissOnBackdropTap: true,
           isBackdropInteractable: true,
-          onDismissPrevented: (backButton, backDrop) async {
+          onDismissPrevented: ({required backButton, required backDrop}) async {
             HapticFeedback.heavyImpact();
 
             if (backButton || backDrop) {
