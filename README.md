@@ -325,5 +325,3 @@ The GIF above showcases the user experience when dealing with scrollable content
 
 One of the simplest use cases is implementing easy confirmations within your application. The GIF above demonstrates it in action. With our package, you can effortlessly implement a sliding sheet that provides a smooth and intuitive confirmation experience.
 Whether it's deleting a file, confirming a purchase, or accepting a prompt, the sliding sheet offers a straightforward and user-friendly approach.
-
-
