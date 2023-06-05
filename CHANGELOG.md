@@ -1,7 +1,10 @@
+## 1.1.0
+* **Added** `customBuilder` [#15](https://github.com/What-the-Flutter/wtf_sliding_sheet/pull/15)
+
 ## 1.0.0
-* **Fixed** [#7](https://github.com/flutterwtf/wtf_sliding_sheet/pull/7)
-* **Added** flutter 3.10 support
-* **Added** dart 3 support
+* **Fixed** [#7](https://github.com/What-the-Flutter/wtf_sliding_sheet/pull/7)
+* **Added** Flutter 3.10 support
+* **Added** Dart 3 support
 
 ## 0.6.1
 * **Migrate** to a new repository name
