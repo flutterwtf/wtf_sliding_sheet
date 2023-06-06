@@ -18,13 +18,13 @@ void main() => runApp(
       kIsWeb
           ? const WebWrapper(
               app: MaterialApp(
-                title: 'Example App',
+                title: 'wtf_sliding_sheet demo',
                 debugShowCheckedModeBanner: false,
                 home: Example(),
               ),
             )
           : const MaterialApp(
-              title: 'Example App',
+              title: 'wtf_sliding_sheet demo',
               debugShowCheckedModeBanner: false,
               home: Example(),
             ),
