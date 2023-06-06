@@ -30,11 +30,7 @@
 
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
-<a href="https://github.com/What-the-Flutter/wtf_sliding_sheet/blob/master/example/lib/main.dart">
-  <img width="205px" alt="Example of a SlidingSheet" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_preview.gif"/>
-</a>
-
-Click [here](https://github.com/What-the-Flutter/wtf_sliding_sheet/blob/master/example/lib/main.dart) to view the full example.
+You can check interactive example [here](https://what-the-flutter.github.io/wtf_sliding_sheet/#/).
 
 The package is a fork of [this](https://github.com/tchigher/sliding-sheet) repository.
 
