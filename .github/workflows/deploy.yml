@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install latest flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Initialize
+        run: |
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter config --enable-web
+
+      - name: Build
+        run: |
+          cd example/
+          flutter build web --no-tree-shake-icons
+          sed -i 's+href="/"+href="./"+g' build/web/index.html
+          cd ..
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: example/build/web
+          clean: true
