@@ -3,10 +3,8 @@ name: WTF Sliding Sheet CI/CD
 on:
   push:
     branches:
-      - "master"
   pull_request:
     branches:
-      - "master"
 
 jobs:
   analyze:
@@ -25,4 +23,6 @@ jobs:
         run: flutter analyze
 
       - name: Pana check
-        run: ./scripts/pana_check.sh
+        run: |
+          dart pub global activate pana
+          pana --exit-code-threshold 10 --no-warning

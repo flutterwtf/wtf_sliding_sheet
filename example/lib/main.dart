@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 import 'package:example/util/util.dart';
+import 'package:example/web_wrapper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,11 +15,19 @@ import 'package:wtf_sliding_sheet/wtf_sliding_sheet.dart';
 const Color mapsBlue = Color(0xFF4185F3);
 
 void main() => runApp(
-      const MaterialApp(
-        title: 'Example App',
-        debugShowCheckedModeBanner: false,
-        home: Example(),
-      ),
+      kIsWeb
+          ? const WebWrapper(
+              app: MaterialApp(
+                title: 'wtf_sliding_sheet demo',
+                debugShowCheckedModeBanner: false,
+                home: Example(),
+              ),
+            )
+          : const MaterialApp(
+              title: 'wtf_sliding_sheet demo',
+              debugShowCheckedModeBanner: false,
+              home: Example(),
+            ),
     );
 
 class Example extends StatefulWidget {
@@ -493,7 +503,7 @@ class _ExampleState extends State<Example> {
           isDismissable: isDismissable,
           dismissOnBackdropTap: true,
           isBackdropInteractable: true,
-          onDismissPrevented: (backButton, backDrop) async {
+          onDismissPrevented: ({required backButton, required backDrop}) async {
             HapticFeedback.heavyImpact();
 
             if (backButton || backDrop) {
