@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:wtf_sliding_sheet/src/sheet.dart';
 import 'package:wtf_sliding_sheet/src/sheet_listener_builder.dart';
-
-import 'sheet.dart';
 
 // ignore_for_file: public_member_api_docs
 
@@ -22,21 +20,21 @@ class SheetContainer extends StatelessWidget {
   final BoxConstraints? constraints;
 
   const SheetContainer({
-    Key? key,
+    super.key,
     this.duration,
     this.borderRadius = 0.0,
     this.elevation = 0.0,
     this.border,
     this.customBorders,
     this.margin,
-    this.padding = const EdgeInsets.all(0),
-    this.child,
+    this.padding = EdgeInsets.zero,
     this.color = Colors.transparent,
     this.shadowColor = Colors.black12,
     this.boxShadows,
     this.alignment,
     this.constraints,
-  }) : super(key: key);
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,41 +42,38 @@ class SheetContainer extends StatelessWidget {
 
     final decoration = BoxDecoration(
       color: color,
-      borderRadius: br,
       border: border,
+      borderRadius: br,
       boxShadow: boxShadows ??
           (elevation > 0.0
               ? [
                   BoxShadow(
                     color: shadowColor ?? Colors.black12,
                     blurRadius: elevation,
-                    spreadRadius: 0,
-                  )
+                  ),
                 ]
               : const []),
     );
 
     final child = ClipRRect(borderRadius: br, child: this.child);
 
-    if (duration == null || duration == Duration.zero) {
-      return Container(
-        margin: margin,
-        padding: padding,
-        alignment: alignment,
-        constraints: constraints,
-        decoration: decoration,
-        child: child,
-      );
-    } else {
-      return AnimatedContainer(
-        duration: duration!,
-        padding: padding,
-        alignment: alignment,
-        constraints: constraints,
-        decoration: decoration,
-        child: child,
-      );
-    }
+    return duration == null || duration == Duration.zero
+        ? Container(
+            alignment: alignment,
+            padding: padding,
+            decoration: decoration,
+            constraints: constraints,
+            margin: margin,
+            child: child,
+          )
+        : AnimatedContainer(
+            alignment: alignment,
+            padding: padding,
+            decoration: decoration,
+            constraints: constraints,
+            child: child,
+            duration: duration!,
+          );
   }
 }
 
@@ -89,28 +84,28 @@ class ElevatedContainer extends StatelessWidget {
   final Widget child;
 
   const ElevatedContainer({
-    Key? key,
     required this.shadowColor,
     required this.elevation,
     required this.elevateWhen,
     required this.child,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (elevation == 0) return child;
 
     return SheetListenerBuilder(
-      buildWhen: (oldState, newState) =>
-          elevateWhen(oldState) != elevateWhen(newState),
       builder: (context, state) {
         return SheetContainer(
-          shadowColor: shadowColor,
-          elevation: elevateWhen(state) ? elevation : 0.0,
           duration: const Duration(milliseconds: 400),
+          elevation: elevateWhen(state) ? elevation : 0.0,
+          shadowColor: shadowColor,
           child: child,
         );
       },
+      buildWhen: (oldState, newState) =>
+          elevateWhen(oldState) != elevateWhen(newState),
     );
   }
 }

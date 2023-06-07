@@ -2,15 +2,16 @@ part of 'sheet.dart';
 
 /// Shows a [SlidingSheet] as a material design bottom sheet.
 ///
-/// The `builder` parameter must not be null and is used to construct a [SlidingSheetDialog].
+/// The `builder` parameter must not be null and is used to construct a
+/// [SlidingSheetDialog].
 ///
-/// The `parentBuilder` parameter can be used to wrap the sheet inside a parent, for example a
-/// [Theme] or [AnnotatedRegion].
+/// The `parentBuilder` parameter can be used to wrap the sheet inside a parent,
+/// for example a [Theme] or [AnnotatedRegion].
 ///
 /// The `routeSettings` argument, see [RouteSettings] for details.
 ///
-/// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard from obscuring
-/// the content bottom sheet.
+/// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard
+/// from obscuring the content bottom sheet.
 Future<T?> showSlidingBottomSheet<T>(
   BuildContext context, {
   required SlidingSheetDialog Function(BuildContext context) builder,
@@ -19,11 +20,11 @@ Future<T?> showSlidingBottomSheet<T>(
   bool useRootNavigator = false,
   bool resizeToAvoidBottomInset = true,
 }) {
-  SlidingSheetDialog dialog = builder(context);
-  final SheetController controller = dialog.controller ?? SheetController();
+  var dialog = builder(context);
+  final controller = dialog.controller ?? SheetController();
 
   final theme = Theme.of(context);
-  final ValueNotifier<int> rebuilder = ValueNotifier(0);
+  final rebuilder = ValueNotifier<int>(0);
 
   return Navigator.of(
     context,
@@ -86,7 +87,6 @@ Future<T?> showSlidingBottomSheet<T>(
               extendBody: dialog.extendBody,
               liftOnScrollHeaderElevation: dialog.liftOnScrollHeaderElevation,
               liftOnScrollFooterElevation: dialog.liftOnScrollFooterElevation,
-              body: null,
               openBouncing: false,
             );
 
@@ -240,15 +240,6 @@ class _SlidingSheetRoute<T> extends PageRoute<T> {
   ) builder;
   final Duration duration;
 
-  _SlidingSheetRoute({
-    required this.builder,
-    required this.duration,
-    RouteSettings? settings,
-  }) : super(
-          settings: settings,
-          fullscreenDialog: false,
-        );
-
   @override
   bool get opaque => false;
 
@@ -266,6 +257,14 @@ class _SlidingSheetRoute<T> extends PageRoute<T> {
 
   @override
   Duration get transitionDuration => duration;
+
+  _SlidingSheetRoute({
+    required this.builder,
+    required this.duration,
+    super.settings,
+  }) : super(
+          fullscreenDialog: false,
+        );
 
   @override
   Widget buildPage(

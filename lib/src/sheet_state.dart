@@ -46,6 +46,12 @@ class SheetState {
 
   final _SheetExtent? _extent;
 
+  /// The current scroll offset of the [Scrollable] inside the sheet.
+  double get currentScrollOffset => _extent?.scrollOffset ?? 0.0;
+
+  /// The maximum amount the Scrollable inside the sheet can scroll.
+  double get maxScrollExtent => _extent?.maxScrollExtent ?? 0.0;
+
   /// A data class containing state information about the [SlidingSheet]
   /// at the time this state was emitted.
   SheetState(
@@ -54,8 +60,9 @@ class SheetState {
     required this.isLaidOut,
     required this.maxExtent,
     required double minExtent,
-    // On Bottomsheets it is possible for min and maxExtents to be the same (when you only set one snap).
-    // Thus we have to account for this and set the minExtent to be zero.
+    // On Bottomsheets it is possible for min and maxExtents to be the same
+    // (when you only set one snap). Thus we have to account for this and
+    // set the minExtent to be zero.
   })  : minExtent = minExtent != maxExtent ? minExtent : 0.0,
         progress = isLaidOut
             ? ((extent - minExtent) / (maxExtent - minExtent)).clamp(0.0, 1.0)
@@ -68,21 +75,16 @@ class SheetState {
         isShown = extent > 0.0,
         scrollOffset = _extent?.scrollOffset ?? 0.0;
 
-  /// A default constructor which can be used to initial `ValueNotifers` for instance.
+  /// A default constructor which can be used to initial `ValueNotifers` for
+  /// instance.
   SheetState.inital()
       : this(
           null,
-          extent: 0.0,
-          minExtent: 0.0,
-          maxExtent: 1.0,
+          extent: 0,
+          minExtent: 0,
+          maxExtent: 1,
           isLaidOut: false,
         );
-
-  /// The current scroll offset of the [Scrollable] inside the sheet.
-  double get currentScrollOffset => _extent?.scrollOffset ?? 0.0;
-
-  /// The maximum amount the Scrollable inside the sheet can scroll.
-  double get maxScrollExtent => _extent?.maxScrollExtent ?? 0.0;
 
   /// private
   static ValueNotifier<SheetState> notifier(BuildContext context) {
@@ -96,7 +98,7 @@ class SheetState {
     return 'SheetState(extent: $extent, minExtent: $minExtent, '
         'maxExtent: $maxExtent, isLaidOut: $isLaidOut, progress: $progress, '
         'scrollOffset: $scrollOffset, maxScrollExtent: $maxScrollExtent, '
-        'isExpanded: $isExpanded, isCollapsed: $isCollapsed, isAtTop: $isAtTop, '
-        'isAtBottom: $isAtBottom, isHidden: $isHidden, isShown: $isShown)';
+        'isExpanded: $isExpanded, isCollapsed: $isCollapsed, isAtTop: $isAtTop,'
+        ' isAtBottom: $isAtBottom, isHidden: $isHidden, isShown: $isShown)';
   }
 }

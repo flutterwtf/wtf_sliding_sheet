@@ -5,8 +5,8 @@ class SheetController {
   /// Inherit the [SheetController] from the closest [SlidingSheet].
   ///
   /// Every [SlidingSheet] has a [SheetController], even if you didn't assign
-  /// one explicitly. This allows you to call functions on the controller from child
-  /// widgets without having to pass a [SheetController] around.
+  /// one explicitly. This allows you to call functions on the controller from
+  /// child widgets without having to pass a [SheetController] around.
   static SheetController? of(BuildContext context) {
     return context
         .findAncestorStateOfType<_SlidingSheetState>()
