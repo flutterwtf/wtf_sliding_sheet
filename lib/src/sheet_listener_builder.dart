@@ -22,6 +22,7 @@ class SheetListenerBuilder extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _SheetListenerBuilderState createState() => _SheetListenerBuilderState();
 }
 
@@ -30,13 +31,6 @@ class _SheetListenerBuilderState extends State<SheetListenerBuilder> {
 
   late final ValueNotifier<SheetState> _notifier = SheetState.notifier(context)
     ..addListener(_listener);
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _state = _notifier.value;
-  }
 
   void _listener() {
     final newState = _notifier.value;
@@ -47,6 +41,13 @@ class _SheetListenerBuilderState extends State<SheetListenerBuilder> {
       _state = newState;
       setState(() {});
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _state = _notifier.value;
   }
 
   @override

@@ -31,31 +31,24 @@ Future<T?> showSlidingBottomSheet<T>(
     rootNavigator: useRootNavigator,
   ).push(
     _SlidingSheetRoute(
-      duration: dialog.duration,
-      settings: routeSettings,
       builder: (context, animation, route) {
         return ValueListenableBuilder(
           valueListenable: rebuilder,
           builder: (context, dynamic value, _) {
             dialog = builder(context);
-
-            // Assign the rebuild function in order to
-            // be able to change the dialogs parameters
-            // inside a dialog.
             controller._rebuild = () {
               rebuilder.value++;
             };
-
             var snapSpec = dialog.snapSpec;
             if (snapSpec.snappings.first != 0.0) {
-              snapSpec = snapSpec.copyWith(
-                snappings: [0.0] + snapSpec.snappings,
-              );
+              snapSpec =
+                  snapSpec.copyWith(snappings: [0.0] + snapSpec.snappings);
             }
-
             Widget sheet = SlidingSheet._(
-              route: route,
-              controller: controller,
+              builder: dialog.builder,
+              customBuilder: dialog.customBuilder,
+              headerBuilder: dialog.headerBuilder,
+              footerBuilder: dialog.footerBuilder,
               snapSpec: snapSpec,
               openDuration: dialog.duration,
               color: dialog.color ??
@@ -72,29 +65,25 @@ Future<T?> showSlidingBottomSheet<T>(
               cornerRadius: dialog.cornerRadius,
               cornerRadiusOnFullscreen: dialog.cornerRadiusOnFullscreen,
               closeOnBackdropTap: dialog.dismissOnBackdropTap,
-              builder: dialog.builder,
-              customBuilder: dialog.customBuilder,
-              headerBuilder: dialog.headerBuilder,
-              footerBuilder: dialog.footerBuilder,
               listener: dialog.listener,
+              controller: controller,
               scrollSpec: dialog.scrollSpec,
               maxWidth: dialog.maxWidth,
-              closeSheetOnBackButtonPressed: false,
               minHeight: dialog.minHeight,
-              isDismissable: dialog.isDismissable,
-              onDismissPrevented: dialog.onDismissPrevented,
+              closeSheetOnBackButtonPressed: false,
               isBackdropInteractable: dialog.isBackdropInteractable,
               axisAlignment: dialog.axisAlignment,
               extendBody: dialog.extendBody,
               liftOnScrollHeaderElevation: dialog.liftOnScrollHeaderElevation,
               liftOnScrollFooterElevation: dialog.liftOnScrollFooterElevation,
               openBouncing: false,
+              route: route,
+              isDismissable: dialog.isDismissable,
+              onDismissPrevented: dialog.onDismissPrevented,
             );
-
             if (parentBuilder != null) {
               sheet = parentBuilder(context, sheet as SlidingSheet);
             }
-
             if (resizeToAvoidBottomInset) {
               sheet = Padding(
                 padding: EdgeInsets.only(
@@ -103,11 +92,12 @@ Future<T?> showSlidingBottomSheet<T>(
                 child: sheet,
               );
             }
-
             return sheet;
           },
         );
       },
+      duration: dialog.duration,
+      settings: routeSettings,
     ),
   );
 }

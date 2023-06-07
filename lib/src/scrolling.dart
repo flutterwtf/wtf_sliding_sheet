@@ -1,5 +1,6 @@
 part of 'sheet.dart';
 
+// ignore_for_file: parameter_assignments
 class _SheetExtent {
   final bool isDialog;
   final _SlidingSheetScrollController? controller;
@@ -467,7 +468,8 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     );
 
     final ballisticController = AnimationController.unbounded(
-      debugLabel: '$runtimeType',
+      // ignore: no_runtimeType_toString
+      debugLabel: runtimeType.toString(),
       vsync: context.vsync,
     );
 

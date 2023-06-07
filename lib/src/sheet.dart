@@ -1,3 +1,6 @@
+// ignore_for_file: no_default_cases, library_private_types_in_public_api
+// ignore_for_file: parameter_assignments
+
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
@@ -412,9 +415,16 @@ class SlidingSheet extends StatefulWidget {
     this.onOpen,
   })  :
 
-        /// Checking whether one of the `builder` and `customBuilder` is specified.
-        assert(builder != null || customBuilder != null),
-        assert(builder == null || customBuilder == null),
+        /// Checking whether one of the `builder` and `customBuilder` is
+        /// specified.
+        assert(
+          builder != null || customBuilder != null,
+          'Either the `builder` or the `customBuilder` must be specified.',
+        ),
+        assert(
+          builder == null || customBuilder == null,
+          'Either the `builder` or the `customBuilder` must be specified.',
+        ),
         assert(
           snapSpec.snappings.length >= 2,
           'There must be at least two snapping extents to snap in between.',
@@ -423,9 +433,18 @@ class SlidingSheet extends StatefulWidget {
           snapSpec.minSnap != snapSpec.maxSnap || route != null,
           'The min and max snaps cannot be equal.',
         ),
-        assert(axisAlignment >= -1.0 && axisAlignment <= 1.0),
-        assert(liftOnScrollHeaderElevation >= 0.0),
-        assert(liftOnScrollFooterElevation >= 0.0);
+        assert(
+          axisAlignment >= -1.0 && axisAlignment <= 1.0,
+          'The axisAlignment must be in the range from -1.0 and 1.0.',
+        ),
+        assert(
+          liftOnScrollHeaderElevation >= 0.0,
+          'The liftOnScrollHeaderElevation must be greater than or equal 0.',
+        ),
+        assert(
+          liftOnScrollFooterElevation >= 0.0,
+          'The liftOnScrollFooterElevation must be greater than or equal 0.',
+        );
 
   @override
   _SlidingSheetState createState() => _SlidingSheetState();
@@ -602,6 +621,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       }
     });
 
+    // ignore: prefer-async-await
     widget.route!.popped.then(
       (_) {
         if (!dismissUnderway) {
@@ -673,13 +693,11 @@ class _SlidingSheetState extends State<SlidingSheet>
 
     if (availableHeight > 0) {
       final num maxPossibleExtent = () {
-        if (isCustom) {
-          return 1.0;
-        } else {
-          return isLaidOut
-              ? (sheetHeight / availableHeight).clamp(0.0, 1.0)
-              : 1.0;
-        }
+        return isCustom
+            ? 1.0
+            : isLaidOut
+                ? (sheetHeight / availableHeight).clamp(0.0, 1.0)
+                : 1.0;
       }();
 
       var extent = snap;
@@ -968,7 +986,6 @@ class _SlidingSheetState extends State<SlidingSheet>
         constraints: BoxConstraints(maxWidth: widget.maxWidth),
         child: SizedBox.expand(
           child: ValueListenableBuilder(
-            child: sheet,
             valueListenable: extent!._currentExtent,
             builder: (context, dynamic extent, sheet) {
               final translation = () {
@@ -978,7 +995,6 @@ class _SlidingSheetState extends State<SlidingSheet>
                             headerFooterExtent)
                     : 0.0;
               }();
-
               return Invisible(
                 invisible: !isLaidOut || currentExtent == 0.0,
                 child: FractionallySizedBox(
@@ -1009,6 +1025,7 @@ class _SlidingSheetState extends State<SlidingSheet>
                 ),
               );
             },
+            child: sheet,
           ),
         ),
       ),
@@ -1024,12 +1041,12 @@ class _SlidingSheetState extends State<SlidingSheet>
               child: widget.customBuilder!(context, controller, state),
             )
           : SingleChildScrollView(
-              controller: controller,
-              physics: scrollSpec.physics,
               padding: EdgeInsets.only(
                 top: !hasHeader ? padding.top : 0.0,
                 bottom: !hasFooter ? padding.bottom : 0.0,
               ),
+              physics: scrollSpec.physics,
+              controller: controller,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: widget.minHeight ?? 0.0),
                 child: SizeChangedLayoutNotifier(
@@ -1066,6 +1083,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       return widget.body ?? const SizedBox();
     }
 
+    // ignore: arguments-ordering
     return ValueListenableBuilder(
       valueListenable: extent!._currentExtent,
       // ignore: sort_child_properties_last
@@ -1143,6 +1161,7 @@ class _SlidingSheetState extends State<SlidingSheet>
               onTap: widget.closeOnBackdropTap ? onTap : null,
             );
           } else if (widget.closeOnBackdropTap) {
+            // ignore: arguments-ordering
             return GestureDetector(
               onTap: onTap,
               behavior: HitTestBehavior.translucent,
@@ -1176,6 +1195,7 @@ class _SlidingSheetState extends State<SlidingSheet>
       _handleNonDismissableSnapBack();
     }
 
+    // ignore: arguments-ordering
     return GestureDetector(
       onTap: onTap,
       onVerticalDragStart: (details) {

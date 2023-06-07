@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wtf_sliding_sheet/src/sheet.dart';
 
 // ignore_for_file: public_member_api_docs
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
 /// How the snaps will be positioned.
 enum SnapPositioning {

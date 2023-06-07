@@ -55,4 +55,3 @@ dart_code_metrics:
     - cyclomatic-complexity: 10
     - maximum-nesting-level: 5
     - source-lines-of-code: 50
-

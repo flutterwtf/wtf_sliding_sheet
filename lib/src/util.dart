@@ -26,12 +26,13 @@ class Invisible extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
+      // ignore: sort_child_properties_last
+      child: child!,
       visible: !invisible,
-      maintainSemantics: true,
-      maintainSize: true,
       maintainState: true,
       maintainAnimation: true,
-      child: child!,
+      maintainSize: true,
+      maintainSemantics: true,
     );
   }
 }

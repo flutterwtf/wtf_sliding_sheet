@@ -55,6 +55,7 @@ class SheetState {
   /// A data class containing state information about the [SlidingSheet]
   /// at the time this state was emitted.
   SheetState(
+    // ignore: library_private_types_in_public_api
     this._extent, {
     required this.extent,
     required this.isLaidOut,
