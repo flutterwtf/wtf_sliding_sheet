@@ -656,15 +656,15 @@ class _SlidingSheetState extends State<SlidingSheet>
       final previousMaxExtent =
           isLaidOut ? (sheetHeight / availableHeight).clamp(0.0, 1.0) : 1.0;
 
-      final isChildLaidOut = child?.hasSize ?? true;
+      final isChildLaidOut = child?.hasSize ?? false;
       final prevChildHeight = childHeight;
       childHeight = isChildLaidOut ? child!.size.height : 0;
 
-      final isHeaderLaidOut = header?.hasSize ?? true;
+      final isHeaderLaidOut = header?.hasSize ?? false;
       final prevHeaderHeight = headerHeight;
       headerHeight = isHeaderLaidOut ? header!.size.height : 0;
 
-      final isFooterLaidOut = footer?.hasSize ?? true;
+      final isFooterLaidOut = footer?.hasSize ?? false;
       final prevFooterHeight = footerHeight;
       footerHeight = isFooterLaidOut ? footer!.size.height : 0;
 

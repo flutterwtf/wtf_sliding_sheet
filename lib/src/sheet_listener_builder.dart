@@ -22,8 +22,7 @@ class SheetListenerBuilder extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _SheetListenerBuilderState createState() => _SheetListenerBuilderState();
+  State<SheetListenerBuilder> createState() => _SheetListenerBuilderState();
 }
 
 class _SheetListenerBuilderState extends State<SheetListenerBuilder> {

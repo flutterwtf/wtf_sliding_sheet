@@ -36,6 +36,9 @@ Future<T?> showSlidingBottomSheet<T>(
           valueListenable: rebuilder,
           builder: (context, dynamic value, _) {
             dialog = builder(context);
+            // Assign the rebuild function in order to
+            // be able to change the dialogs parameters
+            // inside a dialog.
             controller._rebuild = () {
               rebuilder.value++;
             };

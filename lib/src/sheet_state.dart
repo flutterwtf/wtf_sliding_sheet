@@ -70,7 +70,7 @@ class SheetState {
             : 0.0,
         isExpanded = toPrecision(extent) >= toPrecision(maxExtent),
         isCollapsed = toPrecision(extent) <= toPrecision(minExtent),
-        isAtTop = _extent?.isAtTop ?? true,
+        isAtTop = _extent?.isAtTop ?? false,
         isAtBottom = _extent?.isAtBottom ?? false,
         isHidden = extent <= 0.0,
         isShown = extent > 0.0,

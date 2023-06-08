@@ -16,6 +16,7 @@ analyzer:
     # remove line below to enable doc lints
     public_member_api_docs: ignore
     sort_constructors_first: ignore
+    unnecessary_library_directive: ignore
 
   exclude:
     - "build/**"
@@ -50,8 +51,10 @@ dart_code_metrics:
     - avoid-passing-async-when-sync-expected: false
     - avoid-returning-widgets: false
     - prefer-correct-identifier-length: false
+    - arguments-ordering: false
 
   metrics:
     - cyclomatic-complexity: 10
     - maximum-nesting-level: 5
     - source-lines-of-code: 50
+

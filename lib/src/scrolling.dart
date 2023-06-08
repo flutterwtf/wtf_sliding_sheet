@@ -99,7 +99,7 @@ class _SlidingSheetScrollController extends ScrollController {
 
   double get minExtent => extent.minExtent;
 
-  bool get animating => controller?.isAnimating ?? true;
+  bool get animating => controller?.isAnimating ?? false;
 
   bool get inInteraction => inDrag || animating;
 
