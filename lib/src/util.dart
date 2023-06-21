@@ -18,20 +18,19 @@ class Invisible extends StatelessWidget {
   final bool invisible;
   final Widget? child;
   const Invisible({
-    Key? key,
+    super.key,
     this.invisible = false,
     this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: !invisible,
-      maintainInteractivity: false,
-      maintainSemantics: true,
-      maintainSize: true,
       maintainState: true,
       maintainAnimation: true,
+      maintainSize: true,
+      maintainSemantics: true,
       child: child!,
     );
   }

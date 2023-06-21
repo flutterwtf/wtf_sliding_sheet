@@ -2,15 +2,16 @@ part of 'sheet.dart';
 
 /// Shows a [SlidingSheet] as a material design bottom sheet.
 ///
-/// The `builder` parameter must not be null and is used to construct a [SlidingSheetDialog].
+/// The `builder` parameter must not be null and is used to construct a
+/// [SlidingSheetDialog].
 ///
-/// The `parentBuilder` parameter can be used to wrap the sheet inside a parent, for example a
-/// [Theme] or [AnnotatedRegion].
+/// The `parentBuilder` parameter can be used to wrap the sheet inside a parent,
+/// for example a [Theme] or [AnnotatedRegion].
 ///
 /// The `routeSettings` argument, see [RouteSettings] for details.
 ///
-/// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard from obscuring
-/// the content bottom sheet.
+/// The `resizeToAvoidBottomInset` parameter can be used to avoid the keyboard
+/// from obscuring the content bottom sheet.
 Future<T?> showSlidingBottomSheet<T>(
   BuildContext context, {
   required SlidingSheetDialog Function(BuildContext context) builder,
@@ -19,42 +20,38 @@ Future<T?> showSlidingBottomSheet<T>(
   bool useRootNavigator = false,
   bool resizeToAvoidBottomInset = true,
 }) {
-  SlidingSheetDialog dialog = builder(context);
-  final SheetController controller = dialog.controller ?? SheetController();
+  var dialog = builder(context);
+  final controller = dialog.controller ?? SheetController();
 
   final theme = Theme.of(context);
-  final ValueNotifier<int> rebuilder = ValueNotifier(0);
+  final rebuilder = ValueNotifier<int>(0);
 
   return Navigator.of(
     context,
     rootNavigator: useRootNavigator,
   ).push(
     _SlidingSheetRoute(
-      duration: dialog.duration,
-      settings: routeSettings,
       builder: (context, animation, route) {
         return ValueListenableBuilder(
           valueListenable: rebuilder,
           builder: (context, dynamic value, _) {
             dialog = builder(context);
-
             // Assign the rebuild function in order to
             // be able to change the dialogs parameters
             // inside a dialog.
             controller._rebuild = () {
               rebuilder.value++;
             };
-
             var snapSpec = dialog.snapSpec;
             if (snapSpec.snappings.first != 0.0) {
-              snapSpec = snapSpec.copyWith(
-                snappings: [0.0] + snapSpec.snappings,
-              );
+              snapSpec =
+                  snapSpec.copyWith(snappings: [0.0] + snapSpec.snappings);
             }
-
             Widget sheet = SlidingSheet._(
-              route: route,
-              controller: controller,
+              builder: dialog.builder,
+              customBuilder: dialog.customBuilder,
+              headerBuilder: dialog.headerBuilder,
+              footerBuilder: dialog.footerBuilder,
               snapSpec: snapSpec,
               openDuration: dialog.duration,
               color: dialog.color ??
@@ -71,30 +68,25 @@ Future<T?> showSlidingBottomSheet<T>(
               cornerRadius: dialog.cornerRadius,
               cornerRadiusOnFullscreen: dialog.cornerRadiusOnFullscreen,
               closeOnBackdropTap: dialog.dismissOnBackdropTap,
-              builder: dialog.builder,
-              customBuilder: dialog.customBuilder,
-              headerBuilder: dialog.headerBuilder,
-              footerBuilder: dialog.footerBuilder,
               listener: dialog.listener,
+              controller: controller,
               scrollSpec: dialog.scrollSpec,
               maxWidth: dialog.maxWidth,
-              closeSheetOnBackButtonPressed: false,
               minHeight: dialog.minHeight,
-              isDismissable: dialog.isDismissable,
-              onDismissPrevented: dialog.onDismissPrevented,
+              closeSheetOnBackButtonPressed: false,
               isBackdropInteractable: dialog.isBackdropInteractable,
               axisAlignment: dialog.axisAlignment,
               extendBody: dialog.extendBody,
               liftOnScrollHeaderElevation: dialog.liftOnScrollHeaderElevation,
               liftOnScrollFooterElevation: dialog.liftOnScrollFooterElevation,
-              body: null,
               openBouncing: false,
+              route: route,
+              isDismissable: dialog.isDismissable,
+              onDismissPrevented: dialog.onDismissPrevented,
             );
-
             if (parentBuilder != null) {
               sheet = parentBuilder(context, sheet as SlidingSheet);
             }
-
             if (resizeToAvoidBottomInset) {
               sheet = Padding(
                 padding: EdgeInsets.only(
@@ -103,11 +95,12 @@ Future<T?> showSlidingBottomSheet<T>(
                 child: sheet,
               );
             }
-
             return sheet;
           },
         );
       },
+      duration: dialog.duration,
+      settings: routeSettings,
     ),
   );
 }
@@ -245,15 +238,6 @@ class _SlidingSheetRoute<T> extends PageRoute<T> {
   ) builder;
   final Duration duration;
 
-  _SlidingSheetRoute({
-    required this.builder,
-    required this.duration,
-    RouteSettings? settings,
-  }) : super(
-          settings: settings,
-          fullscreenDialog: false,
-        );
-
   @override
   bool get opaque => false;
 
@@ -271,6 +255,14 @@ class _SlidingSheetRoute<T> extends PageRoute<T> {
 
   @override
   Duration get transitionDuration => duration;
+
+  _SlidingSheetRoute({
+    required this.builder,
+    required this.duration,
+    super.settings,
+  }) : super(
+          fullscreenDialog: false,
+        );
 
   @override
   Widget buildPage(
