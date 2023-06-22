@@ -1,5 +1,3 @@
-ISSUES.md
-
 # Miscellaneous
 *.class
 *.log
@@ -30,6 +28,7 @@ ISSUES.md
 .pub-cache/
 .pub/
 build/
+pubspec.lock
 
 # Android related
 **/android/**/gradle-wrapper.jar

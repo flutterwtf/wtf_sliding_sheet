@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'sheet.dart';
+import 'package:wtf_sliding_sheet/src/sheet.dart';
 
 // ignore_for_file: public_member_api_docs
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 
 /// How the snaps will be positioned.
 enum SnapPositioning {
@@ -41,23 +41,55 @@ class SnapSpec {
   /// sheet. On a [SlidingSheetDialog] this will be the first extent that
   /// the dialog will animate to.
   ///
-  /// The value must be included in the [snappings] array, otherwise the sheet will
-  /// animate immidiately to the next valid snap.
+  /// The value must be included in the [snappings] array, otherwise the sheet
+  /// will animate immediately to the next valid snap.
   final double? initialSnap;
 
   /// How the snaps will be positioned:
-  /// - [SnapPositioning.relativeToAvailableSpace] positions the snaps relative to the total
-  /// available space (that is, the maximum height the widget can expand to). All values must be between 0 and 1.
-  /// - [SnapPositioning.relativeToSheetHeight] positions the snaps relative to the total size
-  /// of the sheet itself. All values must be between 0 and 1.
-  /// - [SnapPositioning.pixelOffset] positions the snaps at the given pixel offset. If the
-  /// sheet is smaller than the offset, it will snap to the max possible offset.
+  /// - [SnapPositioning.relativeToAvailableSpace] positions the snaps relative
+  /// to the total available space (that is, the maximum height the widget can
+  /// expand to). All values must be between 0 and 1.
+  /// - [SnapPositioning.relativeToSheetHeight] positions the snaps relative to
+  /// the total size of the sheet itself. All values must be between 0 and 1.
+  /// - [SnapPositioning.pixelOffset] positions the snaps at the given pixel
+  /// offset. If the sheet is smaller than the offset, it will snap to the max
+  /// possible offset.
   final SnapPositioning positioning;
 
-  /// A callback function that gets called when the [SlidingSheet] snaps to an extent.
+  /// A callback function that gets called when the [SlidingSheet] snaps to an
+  /// extent.
   final void Function(SheetState, double? snap)? onSnap;
 
-  /// Creates an object that defines how a [SlidingSheet] should snap, or if it should at all.
+  /// The snap extent that makes header and footer fully visible without account
+  /// for vertical padding on the [SlidingSheet].
+  static const double headerFooterSnap = -1;
+
+  /// The snap extent that makes the header fully visible without account for
+  /// top padding on the [SlidingSheet].
+  static const double headerSnap = -2;
+
+  /// The snap extent that makes the footer fully visible without account for
+  /// bottom padding on the [SlidingSheet].
+  static const double footerSnap = -3;
+
+  /// The snap extent that expands the whole [SlidingSheet]
+  static const double expanded = double.infinity;
+
+  double get minSnap => snappings.first;
+
+  double get maxSnap => snappings.last;
+
+  @override
+  int get hashCode {
+    return snap.hashCode ^
+        snappings.hashCode ^
+        initialSnap.hashCode ^
+        positioning.hashCode ^
+        onSnap.hashCode;
+  }
+
+  /// Creates an object that defines how a [SlidingSheet] should snap, or if it
+  /// should at all.
   const SnapSpec({
     this.snap = true,
     this.snappings = const [0.4, 1.0],
@@ -66,28 +98,12 @@ class SnapSpec {
     this.onSnap,
   });
 
-  /// The snap extent that makes header and footer fully visible without account for vertical padding on the [SlidingSheet].
-  static const double headerFooterSnap = -1;
-
-  /// The snap extent that makes the header fully visible without account for top padding on the [SlidingSheet].
-  static const double headerSnap = -2;
-
-  /// The snap extent that makes the footer fully visible without account for bottom padding on the [SlidingSheet].
-  static const double footerSnap = -3;
-
-  /// The snap extent that expands the whole [SlidingSheet]
-  static const double expanded = double.infinity;
-
   /// private
   static bool isSnap(double? snap) =>
       snap == expanded ||
       snap == headerFooterSnap ||
       snap == headerSnap ||
       snap == footerSnap;
-
-  double get minSnap => snappings.first;
-
-  double get maxSnap => snappings.last;
 
   SnapSpec copyWith({
     bool? snap,
@@ -113,24 +129,15 @@ class SnapSpec {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is SnapSpec &&
-        o.snap == snap &&
-        listEquals(o.snappings, snappings) &&
-        o.initialSnap == initialSnap &&
-        o.positioning == positioning &&
-        o.onSnap == onSnap;
-  }
-
-  @override
-  int get hashCode {
-    return snap.hashCode ^
-        snappings.hashCode ^
-        initialSnap.hashCode ^
-        positioning.hashCode ^
-        onSnap.hashCode;
+    return other is SnapSpec &&
+        other.snap == snap &&
+        listEquals(other.snappings, snappings) &&
+        other.initialSnap == initialSnap &&
+        other.positioning == positioning &&
+        other.onSnap == onSnap;
   }
 }
 
@@ -147,6 +154,14 @@ class ScrollSpec {
 
   /// Whether to wrap the scrollable content inside a `Scrollbar` widget.
   final bool showScrollbar;
+
+  @override
+  int get hashCode {
+    return overscroll.hashCode ^
+        overscrollColor.hashCode ^
+        physics.hashCode ^
+        showScrollbar.hashCode;
+  }
 
   /// Creates an object that defines the scroll effects, physics and more.
   const ScrollSpec({
@@ -165,27 +180,19 @@ class ScrollSpec {
 
   @override
   String toString() {
-    return 'ScrollSpec(overscroll: $overscroll, overscrollColor: $overscrollColor, '
-        'physics: $physics, showScrollbar: $showScrollbar)';
+    return 'ScrollSpec(overscroll: $overscroll, overscrollColor: '
+        '$overscrollColor, physics: $physics, showScrollbar: $showScrollbar)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is ScrollSpec &&
-        o.overscroll == overscroll &&
-        o.overscrollColor == overscrollColor &&
-        o.physics == physics &&
-        o.showScrollbar == showScrollbar;
-  }
-
-  @override
-  int get hashCode {
-    return overscroll.hashCode ^
-        overscrollColor.hashCode ^
-        physics.hashCode ^
-        showScrollbar.hashCode;
+    return other is ScrollSpec &&
+        other.overscroll == overscroll &&
+        other.overscrollColor == overscrollColor &&
+        other.physics == physics &&
+        other.showScrollbar == showScrollbar;
   }
 }
 
@@ -202,37 +209,42 @@ class ParallaxSpec {
   /// would be moved with half the speed of the [SlidingSheet].
   final double amount;
 
-  /// The parallax effect will be applied between [minExtent..endExtent] where the minExtent
-  /// is defined by the lowest snap in the `snappings` array on the [SnapSpec].
+  /// The parallax effect will be applied between [minExtent..endExtent] where
+  /// the minExtent is defined by the lowest snap in the `snappings` array on
+  /// the [SnapSpec].
   ///
-  /// If endExtent is null, the [SlidingSheet] will use the penultimate extent on the `snappings` array
-  /// if there are more than 2 snaps, otherwise the `maxExtent` will be used.
+  /// If endExtent is null, the [SlidingSheet] will use the penultimate extent
+  /// on the `snappings` array if there are more than 2 snaps, otherwise the
+  /// `maxExtent` will be used.
   ///
-  /// **Note that the [SnapPositioning] you set on the [SnapSpec] will be applied
-  /// to this extent aswell**
+  /// **Note that the [SnapPositioning] you set on the [SnapSpec] will be
+  /// applied to this extent as well**
   final double? endExtent;
+
+  @override
+  int get hashCode => enabled.hashCode ^ amount.hashCode ^ endExtent.hashCode;
 
   /// Creates an object that defines a parallax effect.
   const ParallaxSpec({
     this.enabled = true,
     this.amount = 0.15,
     this.endExtent,
-  }) : assert(amount >= 0.0 && amount <= 1.0);
+  }) : assert(
+          amount >= 0.0 && amount <= 1.0,
+          'The value of amount must be in [0..1]',
+        );
 
   @override
   String toString() => 'ParallaxSpec(enabled: $enabled, amount: $amount, '
       'extent: $endExtent)';
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is ParallaxSpec &&
-        o.enabled == enabled &&
-        o.amount == amount &&
-        o.endExtent == endExtent;
+    return other is ParallaxSpec &&
+        other.enabled == enabled &&
+        other.amount == amount &&
+        other.endExtent == endExtent;
   }
-
-  @override
-  int get hashCode => enabled.hashCode ^ amount.hashCode ^ endExtent.hashCode;
 }
