@@ -1,8 +1,6 @@
 name: WTF Sliding Sheet CI/CD
 
 on:
-  push:
-    branches:
   pull_request:
     branches:
 
