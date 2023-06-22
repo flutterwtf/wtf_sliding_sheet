@@ -1,3 +1,6 @@
+## 1.1.1
+* **Added web example and code analysers**
+
 ## 1.1.0
 * **Added** `customBuilder` [#15](https://github.com/What-the-Flutter/wtf_sliding_sheet/pull/15)
 
