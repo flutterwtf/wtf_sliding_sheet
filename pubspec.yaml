@@ -4,6 +4,11 @@ version: 1.1.1
 homepage: https://pub.dev/packages/wtf_sliding_sheet
 repository: https://github.com/What-the-Flutter/wtf_sliding_sheet
 
+topics:
+  - bottomsheet
+  - widget
+  - dialog
+
 environment:
   sdk: '>=2.17.0 <4.0.0'
 
