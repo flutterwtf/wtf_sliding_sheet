@@ -1,3 +1,6 @@
+## 1.1.2
+* **Fixed bug with Scrollbar when showScrollbar=true**
+
 ## 1.1.1
 * **Added web example and code analysers**
 
