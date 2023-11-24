@@ -212,23 +212,23 @@ class SlidingSheet extends StatefulWidget {
   /// (far right).
   ///
   /// Defaults to `0.0` (center).
-  /// {@endTemplate}
+  /// {@endtemplate}
   final double axisAlignment;
 
   /// {@template sliding_sheet.extendBody}
   /// Whether to extend the scrollable body of the sheet under
   /// header and/or footer.
-  /// {@endTemplate}
+  /// {@endtemplate}
   final bool extendBody;
 
   /// {@template sliding_sheet.liftOnScrollHeaderElevation}
   /// The elevation of the header when the content scrolls under it.
-  /// {@endTemplate}
+  /// {@endtemplate}
   final double liftOnScrollHeaderElevation;
 
   /// {@template sliding_sheet.liftOnScrollFooterElevation}
   /// The elevation of the footer when there content scrolls under it.
-  /// {@endTemplate}
+  /// {@endtemplate}
   final double liftOnScrollFooterElevation;
 
   // * SlidingSheetDialog fields
@@ -1287,15 +1287,12 @@ class _SlidingSheetState extends State<SlidingSheet>
       return result;
     }
 
-    return WillPopScope(
-      child: result,
-      onWillPop: () async {
+    return PopScope(
+      canPop: state.isCollapsed && widget.isDismissable,
+      onPopInvoked: (_) {
         if (isDialog) {
           if (!widget.isDismissable) {
             _onDismissPrevented(backButton: true);
-            return false;
-          } else {
-            return true;
           }
         } else {
           if (!state.isCollapsed) {
@@ -1304,12 +1301,10 @@ class _SlidingSheetState extends State<SlidingSheet>
             } else {
               _pop(velocity: 0, isBackDrop: false, isBackButton: true);
             }
-            return false;
-          } else {
-            return true;
           }
         }
       },
+      child: result,
     );
   }
 }
