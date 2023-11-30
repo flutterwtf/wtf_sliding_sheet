@@ -704,14 +704,11 @@ class _SlidingSheetState extends State<SlidingSheet>
       switch (snapPositioning) {
         case SnapPositioning.relativeToAvailableSpace:
           isValidRelativeSnap();
-          break;
         case SnapPositioning.relativeToSheetHeight:
           isValidRelativeSnap();
           extent = (snap * maxHeight) / availableHeight;
-          break;
         case SnapPositioning.pixelOffset:
           extent = snap / availableHeight;
-          break;
         default:
           return snap.clamp(0.0, 1.0);
       }
