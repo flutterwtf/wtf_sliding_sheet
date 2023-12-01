@@ -1,3 +1,6 @@
+## 1.1.3
+* **Updates to support flutter version 3.16.0**
+
 ## 1.1.2
 * **Fixed bug with Scrollbar when showScrollbar=true**
 
