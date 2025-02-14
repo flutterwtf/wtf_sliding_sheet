@@ -12,11 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  material_design_icons_flutter: ^6.0.7096
-  wtf_sliding_sheet: ^1.0.0
+  material_design_icons_flutter: ^7.0.7296
+  wtf_sliding_sheet:
+    path: ../
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 
