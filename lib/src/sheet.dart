@@ -710,8 +710,6 @@ class _SlidingSheetState extends State<SlidingSheet>
           extent = (snap * maxHeight) / availableHeight;
         case SnapPositioning.pixelOffset:
           extent = snap / availableHeight;
-        default:
-          return snap.clamp(0.0, 1.0);
       }
 
       if (snap == SnapSpec.headerSnap) {

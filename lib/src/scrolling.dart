@@ -371,7 +371,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     snap ? goSnapped(velocity) : goUnsnapped(velocity);
   }
 
-  void goSnapped(double velocity, {double? snap}) {
+  void goSnapped(double velocity) {
     velocity = velocity.abs();
     const flingThreshold = 1700;
 
@@ -397,7 +397,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
 
       // Find the next snap based on the velocity.
       var distance = double.maxFinite;
-      var targetSnap = snap;
+      double? targetSnap;
 
       final slow = velocity < snapToNextThreshold;
       final target = !slow
@@ -426,7 +426,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       }
 
       // First try to find a snap higher than the current extent.
-      // If there is none (snap == null), find the next snap.
+      // If there is none (targetSnap == null), find the next snap.
       if (targetSnap == null) findSnap();
       if (targetSnap == null) findSnap(greaterThanCurrent: false);
 
@@ -437,11 +437,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       if (targetSnap == 0.0) {
         onPop(velocity: velocity, isBackDrop: false, isBackButton: false);
       } else if (targetSnap != extent.currentExtent && currentExtent > 0) {
-        final initialSnap =
-            (snapBehavior.initialSnap ?? 0.0) / snapBehavior.maxSnap;
-        if (extent.currentExtent < initialSnap) {
-          snapTo(targetSnap!.clamp(minExtent, maxExtent));
-        }
+        snapTo(targetSnap!.clamp(minExtent, maxExtent));
       }
     }
   }

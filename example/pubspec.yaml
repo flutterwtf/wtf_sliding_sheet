@@ -25,4 +25,4 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/maps_screenshot.png
+    - assets/maps_screenshot.png
