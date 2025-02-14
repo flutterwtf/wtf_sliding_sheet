@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 import 'package:wtf_sliding_sheet/src/sheet_container.dart';
 import 'package:wtf_sliding_sheet/src/simple_bounce_curve.dart';
@@ -771,7 +772,9 @@ class _SlidingSheetState extends State<SlidingSheet>
           (currentExtent - previousMaxExtent).abs() < 0.01;
 
       if (currentExtent > maxExtent || isCurrentPreviousMaxExtent) {
-        currentExtent = maxExtent;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          currentExtent = maxExtent;
+        });
       }
     }
   }
@@ -863,7 +866,9 @@ class _SlidingSheetState extends State<SlidingSheet>
       // is depenent on a fixed height, such as SnapSpec.headerSnap or absolute
       // snap values.
       if (isAroundFixedSnap) {
-        currentExtent = changeAdjustedExtent as double;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          currentExtent = changeAdjustedExtent as double;
+        });
       }
     }
   }
