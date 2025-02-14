@@ -1291,7 +1291,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
     return PopScope(
       canPop: state.isCollapsed && widget.isDismissable,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (_, __) {
         if (isDialog) {
           if (!widget.isDismissable) {
             _onDismissPrevented(backButton: true);
