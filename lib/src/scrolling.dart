@@ -397,9 +397,6 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
 
       // Find the next snap based on the velocity.
       var distance = double.maxFinite;
-
-      //targetSnap was initialized with the value of snap,
-      //which might not be the correct initial value.
       double? targetSnap;
 
       final slow = velocity < snapToNextThreshold;
