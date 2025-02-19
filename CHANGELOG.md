@@ -1,3 +1,8 @@
+## 1.1.4
+* **Fix snapping behavior when initialStep is not 1**
+* **Fix listener**
+* **Updates to support flutter version 3.29.0**
+
 ## 1.1.3
 * **Updates to support flutter version 3.16.0**
 

@@ -38,7 +38,7 @@ class CustomContainer extends StatelessWidget {
   final Duration duration;
 
   const CustomContainer({
-    Key? key,
+    super.key,
     this.child,
     this.border,
     this.color = Colors.transparent,
@@ -60,7 +60,7 @@ class CustomContainer extends StatelessWidget {
     this.boxShape = BoxShape.rectangle,
     this.shadowDirection = ShadowDirection.bottomRight,
     this.padding = const EdgeInsets.all(0),
-  }) : super(key: key);
+  });
 
   static const double wrap = -1;
   static const double expand = -2;

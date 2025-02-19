@@ -6,8 +6,8 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:wtf_sliding_sheet/src/sheet_container.dart';
 import 'package:wtf_sliding_sheet/src/simple_bounce_curve.dart';
 import 'package:wtf_sliding_sheet/src/specs.dart';
@@ -744,8 +744,6 @@ class _SlidingSheetState extends State<SlidingSheet>
           return snap * (availableHeight / sheetHeight);
         case SnapPositioning.pixelOffset:
           return snap * availableHeight;
-        default:
-          return snap.clamp(0.0, 1.0);
       }
     } else {
       return snap.clamp(0.0, 1.0);

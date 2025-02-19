@@ -56,8 +56,7 @@ Future<T?> showSlidingBottomSheet<T>(
               openDuration: dialog.duration,
               color: dialog.color ??
                   theme.bottomSheetTheme.backgroundColor ??
-                  theme.dialogTheme.backgroundColor ??
-                  theme.dialogBackgroundColor,
+                  theme.dialogTheme.backgroundColor,
               backdropColor: dialog.backdropColor,
               shadowColor: dialog.shadowColor,
               elevation: dialog.elevation,
