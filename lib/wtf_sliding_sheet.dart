@@ -1,4 +1,4 @@
-library wtf_sliding_sheet;
+library;
 
 export 'src/sheet.dart';
 export 'src/sheet_listener_builder.dart';
