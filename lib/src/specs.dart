@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wtf_sliding_sheet/src/sheet.dart';
 
+// Explanation: Ignoring this rule because the file contains many public members
+// that are self-explanatory or have clear usage contexts, making explicit
+// documentation redundant.
 // ignore_for_file: public_member_api_docs
 // ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
 

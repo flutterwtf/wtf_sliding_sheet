@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Explanation: Ignoring this rule because the file contains many public members
+// that are self-explanatory or have clear usage contexts, making explicit
+// documentation redundant.
 // ignore_for_file: public_member_api_docs
 
 void postFrame(VoidCallback callback) {

@@ -130,8 +130,8 @@ class _ExampleState extends State<Example> {
               width: 16,
               height: 4,
               borderRadius: 2,
-              color: Colors.grey.withOpacity(
-                .5 * (1 - interval(0.7, 1.0, state.progress)),
+              color: Colors.grey.withValues(
+                alpha: .5 * (1 - interval(0.7, 1.0, state.progress)),
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 part of 'sheet.dart';
 
+// This is for ease of use.
 // ignore_for_file: parameter_assignments
 class _SheetExtent {
   final bool isDialog;
@@ -31,7 +32,7 @@ class _SheetExtent {
   double get scrollOffset {
     try {
       return math.max(controller!.offset, 0);
-    } catch (e) {
+    } on Exception catch (_) {
       return 0;
     }
   }
@@ -371,7 +372,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     snap ? goSnapped(velocity) : goUnsnapped(velocity);
   }
 
-  void goSnapped(double velocity, {double? snap}) {
+  void goSnapped(double velocity) {
     velocity = velocity.abs();
     const flingThreshold = 1700;
 
@@ -397,7 +398,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
 
       // Find the next snap based on the velocity.
       var distance = double.maxFinite;
-      var targetSnap = snap;
+      double? targetSnap;
 
       final slow = velocity < snapToNextThreshold;
       final target = !slow
@@ -426,7 +427,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       }
 
       // First try to find a snap higher than the current extent.
-      // If there is none (snap == null), find the next snap.
+      // If there is none (targetSnap == null), find the next snap.
       if (targetSnap == null) findSnap();
       if (targetSnap == null) findSnap(greaterThanCurrent: false);
 
@@ -437,11 +438,7 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       if (targetSnap == 0.0) {
         onPop(velocity: velocity, isBackDrop: false, isBackButton: false);
       } else if (targetSnap != extent.currentExtent && currentExtent > 0) {
-        final initialSnap =
-            (snapBehavior.initialSnap ?? 0.0) / snapBehavior.maxSnap;
-        if (extent.currentExtent < initialSnap) {
-          snapTo(targetSnap!.clamp(minExtent, maxExtent));
-        }
+        snapTo(targetSnap!.clamp(minExtent, maxExtent));
       }
     }
   }
@@ -468,10 +465,13 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     );
 
     final ballisticController = AnimationController.unbounded(
+      // Explanation: Using runtimeType.toString() for debugging purposes
+      // to easily identify the type of the controller in logs.
       // ignore: no_runtimeType_toString
       debugLabel: runtimeType.toString(),
       vsync: context.vsync,
     );
+
 
     var lastDelta = 0.0;
     void tick() {

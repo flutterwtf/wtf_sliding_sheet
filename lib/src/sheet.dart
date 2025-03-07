@@ -1,3 +1,9 @@
+// Explanation:
+// - no_default_cases: Ignoring this rule because the switch statements in this
+// file are exhaustive and do not require a default case.
+// - library_private_types_in_public_api: Ignoring this rule because the private
+// types are intentionally exposed as part of the public API for specific use
+// cases.
 // ignore_for_file: no_default_cases, library_private_types_in_public_api
 // ignore_for_file: parameter_assignments
 
@@ -7,6 +13,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:wtf_sliding_sheet/src/sheet_container.dart';
 import 'package:wtf_sliding_sheet/src/simple_bounce_curve.dart';
 import 'package:wtf_sliding_sheet/src/specs.dart';
@@ -709,8 +716,6 @@ class _SlidingSheetState extends State<SlidingSheet>
           extent = (snap * maxHeight) / availableHeight;
         case SnapPositioning.pixelOffset:
           extent = snap / availableHeight;
-        default:
-          return snap.clamp(0.0, 1.0);
       }
 
       if (snap == SnapSpec.headerSnap) {
@@ -745,8 +750,6 @@ class _SlidingSheetState extends State<SlidingSheet>
           return snap * (availableHeight / sheetHeight);
         case SnapPositioning.pixelOffset:
           return snap * availableHeight;
-        default:
-          return snap.clamp(0.0, 1.0);
       }
     } else {
       return snap.clamp(0.0, 1.0);
@@ -771,7 +774,9 @@ class _SlidingSheetState extends State<SlidingSheet>
           (currentExtent - previousMaxExtent).abs() < 0.01;
 
       if (currentExtent > maxExtent || isCurrentPreviousMaxExtent) {
-        currentExtent = maxExtent;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          currentExtent = maxExtent;
+        });
       }
     }
   }
@@ -863,7 +868,9 @@ class _SlidingSheetState extends State<SlidingSheet>
       // is depenent on a fixed height, such as SnapSpec.headerSnap or absolute
       // snap values.
       if (isAroundFixedSnap) {
-        currentExtent = changeAdjustedExtent as double;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          currentExtent = changeAdjustedExtent as double;
+        });
       }
     }
   }
@@ -1084,6 +1091,8 @@ class _SlidingSheetState extends State<SlidingSheet>
     // ignore: arguments-ordering
     return ValueListenableBuilder(
       valueListenable: extent!._currentExtent,
+      // Explanation: The 'child' property is placed before 'builder' for
+      // readability and logical grouping of related properties.
       // ignore: sort_child_properties_last
       child: widget.body,
       builder: (context, dynamic _, body) {
@@ -1286,7 +1295,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
     return PopScope(
       canPop: state.isCollapsed && widget.isDismissable,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (_, __) {
         if (isDialog) {
           if (!widget.isDismissable) {
             _onDismissPrevented(backButton: true);
