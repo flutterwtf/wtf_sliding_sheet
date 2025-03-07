@@ -1,3 +1,9 @@
+// Explanation:
+// - no_default_cases: Ignoring this rule because the switch statements in this
+// file are exhaustive and do not require a default case.
+// - library_private_types_in_public_api: Ignoring this rule because the private
+// types are intentionally exposed as part of the public API for specific use
+// cases.
 // ignore_for_file: no_default_cases, library_private_types_in_public_api
 // ignore_for_file: parameter_assignments
 
@@ -1085,6 +1091,8 @@ class _SlidingSheetState extends State<SlidingSheet>
     // ignore: arguments-ordering
     return ValueListenableBuilder(
       valueListenable: extent!._currentExtent,
+      // Explanation: The 'child' property is placed before 'builder' for
+      // readability and logical grouping of related properties.
       // ignore: sort_child_properties_last
       child: widget.body,
       builder: (context, dynamic _, body) {

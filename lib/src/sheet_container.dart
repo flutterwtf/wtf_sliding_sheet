@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wtf_sliding_sheet/src/sheet.dart';
 import 'package:wtf_sliding_sheet/src/sheet_listener_builder.dart';
 
+// Explanation: Ignoring this rule because the file contains many public members
+// that are self-explanatory or have clear usage contexts, making explicit
+// documentation redundant.
 // ignore_for_file: public_member_api_docs
 
 class SheetContainer extends StatelessWidget {
@@ -71,6 +74,8 @@ class SheetContainer extends StatelessWidget {
             padding: padding,
             decoration: decoration,
             constraints: constraints,
+            // Explanation: The 'child' property is placed before 'builder' for
+            // readability and logical grouping of related properties.
             // ignore: sort_child_properties_last
             child: child,
             duration: duration!,

@@ -1,5 +1,6 @@
 part of 'sheet.dart';
 
+// This is for ease of use.
 // ignore_for_file: parameter_assignments
 class _SheetExtent {
   final bool isDialog;
@@ -31,7 +32,7 @@ class _SheetExtent {
   double get scrollOffset {
     try {
       return math.max(controller!.offset, 0);
-    } catch (e) {
+    } on Exception catch (_) {
       return 0;
     }
   }
@@ -464,10 +465,13 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     );
 
     final ballisticController = AnimationController.unbounded(
+      // Explanation: Using runtimeType.toString() for debugging purposes
+      // to easily identify the type of the controller in logs.
       // ignore: no_runtimeType_toString
       debugLabel: runtimeType.toString(),
       vsync: context.vsync,
     );
+
 
     var lastDelta = 0.0;
     void tick() {

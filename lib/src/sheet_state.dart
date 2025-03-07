@@ -55,6 +55,9 @@ class SheetState {
   /// A data class containing state information about the [SlidingSheet]
   /// at the time this state was emitted.
   SheetState(
+    // Explanation: Ignoring this rule because the private type needs to be
+    // exposed in the public API for specific use cases, such as allowing
+    // external customization or integration.
     // ignore: library_private_types_in_public_api
     this._extent, {
     required this.extent,
