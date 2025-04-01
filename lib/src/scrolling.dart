@@ -31,7 +31,7 @@ class _SheetExtent {
 
   double get scrollOffset {
     try {
-      return math.max(controller!.offset, 0);
+      return controller!.hasClients ? math.max(controller!.offset, 0) : 0;
     } on Exception catch (_) {
       return 0;
     }
@@ -471,7 +471,6 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
       debugLabel: runtimeType.toString(),
       vsync: context.vsync,
     );
-
 
     var lastDelta = 0.0;
     void tick() {
