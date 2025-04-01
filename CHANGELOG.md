@@ -1,3 +1,6 @@
+## 1.1.5
+* **Fixed** [#43](https://github.com/flutterwtf/wtf_sliding_sheet/pull/43)
+
 ## 1.1.4
 * **Fix snapping behavior when initialStep is not 1**
 * **Fix listener**
