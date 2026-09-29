@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://flutter.wtf/">
-    <img alt="What the Flutter" src="https://static.tildacdn.com/tild6330-3461-4139-a163-666435336663/Group_13.svg" height=140/>
+    <img alt="What the Flutter" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/logo.svg" height="140"/>
   </a>
 </p>
 
@@ -18,8 +18,8 @@
   <a href="https://pub.dev/packages/wtf_sliding_sheet">
     <img alt="Pub" src="https://img.shields.io/pub/v/wtf_sliding_sheet?color=orange" />
   </a>
-  <a href="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml">
-    <img alt="Build Status" src="https://github.com/What-the-Flutter/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml/badge.svg"/>
+  <a href="https://github.com/flutterwtf/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml">
+    <img alt="Build Status" src="https://github.com/flutterwtf/wtf_sliding_sheet/actions/workflows/wtf_sliding_sheet.yml/badge.svg"/>
   </a>
   <a href="https://www.codefactor.io/repository/github/what-the-flutter/wtf_sliding_sheet/overview/master">
     <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/what-the-flutter/wtf_sliding_sheet/badge/master"/>
@@ -30,7 +30,7 @@
 
 A widget that can be dragged and scrolled in a single gesture and snapped to a list of extents.
 
-You can check interactive example [here](https://what-the-flutter.github.io/wtf_sliding_sheet/#/).
+You can check interactive example [here](https://flutterwtf.github.io/wtf_sliding_sheet/#/).
 
 The package is a fork of [this](https://github.com/tchigher/sliding-sheet) repository.
 
@@ -49,7 +49,7 @@ Install packages from the command line
 flutter pub get
 ```
 
-If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/What-the-Flutter/wtf_sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
+If you like this package, consider supporting it by giving it a star on [GitHub](https://github.com/flutterwtf/wtf_sliding_sheet) and a like on [pub.dev](https://pub.dev/packages/wtf_sliding_sheet) :heart:
 
 ## Usage
 
@@ -103,7 +103,7 @@ Widget build(BuildContext context) {
 
 **Result:**
 
-<img width="205px" alt="Example" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_as_a_widget.gif"/>
+<img width="205px" alt="Example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_as_a_widget.gif"/>
 
 ### As a BottomSheetDialog
 
@@ -151,7 +151,7 @@ void showAsBottomSheet(BuildContext context) async {
 
 **Result:**
 
-<img width="205px" alt="Example" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_as_a_bottom_sheet_dialog.gif"/>
+<img width="205px" alt="Example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_as_a_bottom_sheet_dialog.gif"/>
 
 ### Snapping
 
@@ -166,9 +166,9 @@ positioning | Can be set to one of these three values: `SnapPositioning.relative
 onSnap | A callback function that gets invoked when the `SlidingSheet` snaps to an extent.
 
 <p float="left">
-  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_snap_relative_to_space.png"/>
-  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_snap_relative_to_height.png"/>
-  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_snap_to_pixel_offset.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToAvailableSpace with a snap of 0.5" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_relative_to_space.png"/>
+  <img width="205px" alt="SnapPositioning.relativeToSheetHeight with a snap of 0.5" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_relative_to_height.png"/>
+  <img width="205px" alt="SnapPositioning.pixelOffset with a snap of 100" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_snap_to_pixel_offset.png"/>
 </p>
 
 There are also some prebuild snaps you can facilitate to snap for example to headers or footers as shown in the example.
@@ -262,7 +262,7 @@ Widget build(BuildContext context) {
 
 **Result:**
 
-<img width="205px" alt="Simple header/footer example" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_header_footer.gif"/>
+<img width="205px" alt="Simple header/footer example" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_header_footer.gif"/>
 
 ### ListViews and Columns
 
@@ -299,9 +299,9 @@ return SheetListenerBuilder(
 
 **Result:**
 
-<img width="205px" alt="Example of Material Effects" src="https://raw.githubusercontent.com/What-the-Flutter/wtf_sliding_sheet/master/images/example_material_effects.gif"/>
+<img width="205px" alt="Example of Material Effects" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/example_material_effects.gif"/>
 
-The [example](https://github.com/What-the-Flutter/wtf_sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
+The [example](https://github.com/flutterwtf/wtf_sliding_sheet/blob/master/example/lib/main.dart) for instance decreases the corner radius of the `SlidingSheet` as it gets dragged to the top and increases the headers top padding by the status bar height. Also, when content gets scrolled under the header it elevates.
 
 Because these are common Material behaviors, `SlidingSheet` supports those out of the box, which can be achieved by setting the `avoidStatusBar` field to `true`, `cornerRadiusOnFullscreen` to `0` and `liftOnScrollHeaderElevation` to the elevation.
 
@@ -309,7 +309,7 @@ Because these are common Material behaviors, `SlidingSheet` supports those out o
 
 **Scrollable content**
 
-![lifely_stories_bottom_sheet](https://github.com/What-the-Flutter/wtf_sliding_sheet/assets/94079414/67c4d178-02a5-4a3c-a447-6baadd1d144c)
+![lifely_stories_bottom_sheet](https://github.com/flutterwtf/wtf_sliding_sheet/assets/94079414/67c4d178-02a5-4a3c-a447-6baadd1d144c)
 
 The GIF above showcases the user experience when dealing with scrollable content. With our package, you can easily implement a smooth and intuitive sliding sheet that seamlessly integrates with your application.
 
@@ -317,7 +317,7 @@ The GIF above showcases the user experience when dealing with scrollable content
 
 **Confirmation sheet**
 
-![lifely_confimation_sheet](https://github.com/What-the-Flutter/wtf_sliding_sheet/assets/94079414/bdf1865b-73f2-4f80-a82b-4abe82a3705f)
+![lifely_confimation_sheet](https://github.com/flutterwtf/wtf_sliding_sheet/assets/94079414/bdf1865b-73f2-4f80-a82b-4abe82a3705f)
 
 One of the simplest use cases is implementing easy confirmations within your application. The GIF above demonstrates it in action. With our package, you can effortlessly implement a sliding sheet that provides a smooth and intuitive confirmation experience.
 Whether it's deleting a file, confirming a purchase, or accepting a prompt, the sliding sheet offers a straightforward and user-friendly approach.

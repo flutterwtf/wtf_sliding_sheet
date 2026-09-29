@@ -4,6 +4,11 @@ part of 'sheet.dart';
 class SheetController {
   SheetState? _state;
 
+  // The sheet whose methods are currently assigned to this controller. One
+  // controller can be handed to several sheets in turn, so only the sheet that
+  // is still attached may detach it.
+  _SlidingSheetState? _attachedTo;
+
   Future<void> Function(
     double extent, {
     Duration? duration,
@@ -28,6 +33,11 @@ class SheetController {
 
   /// The current [SheetState] of this [SlidingSheet].
   SheetState? get state => _state;
+
+  /// Whether a mounted [SlidingSheet] currently uses this controller.
+  ///
+  /// Calls on a detached controller do nothing.
+  bool get isAttached => _attachedTo != null;
 
   /// Inherit the [SheetController] from the closest [SlidingSheet].
   ///
@@ -94,4 +104,16 @@ class SheetController {
 
   /// Slides the sheet off to the bottom and hides it.
   Future<void>? hide() => _hide?.call();
+
+  void _detach(_SlidingSheetState sheet) {
+    if (_attachedTo != sheet) return;
+    _attachedTo = null;
+    _snapToExtent = null;
+    _scrollTo = null;
+    _rebuild = null;
+    _collapse = null;
+    _expand = null;
+    _show = null;
+    _hide = null;
+  }
 }

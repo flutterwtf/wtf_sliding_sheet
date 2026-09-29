@@ -1,3 +1,7 @@
+## 1.1.6
+* **Fixed** `SheetController` calls after its sheet is disposed: the controller is now detached in `dispose()`, so `collapse()`, `expand()` and the other methods do nothing instead of failing with a null check in `createTicker`
+* **Added** `SheetController.isAttached`
+
 ## 1.1.5
 * **Fixed** [#43](https://github.com/flutterwtf/wtf_sliding_sheet/pull/43)
 
@@ -16,10 +20,10 @@
 * **Added web example and code analysers**
 
 ## 1.1.0
-* **Added** `customBuilder` [#15](https://github.com/What-the-Flutter/wtf_sliding_sheet/pull/15)
+* **Added** `customBuilder` [#15](https://github.com/flutterwtf/wtf_sliding_sheet/pull/15)
 
 ## 1.0.0
-* **Fixed** [#7](https://github.com/What-the-Flutter/wtf_sliding_sheet/pull/7)
+* **Fixed** [#7](https://github.com/flutterwtf/wtf_sliding_sheet/pull/7)
 * **Added** Flutter 3.10 support
 * **Added** Dart 3 support
 
