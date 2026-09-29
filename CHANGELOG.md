@@ -1,3 +1,6 @@
+## 1.1.7
+* **Fixed** the logo size on pub.dev
+
 ## 1.1.6
 * **Fixed** `SheetController` calls after its sheet is disposed: the controller is now detached in `dispose()`, so `collapse()`, `expand()` and the other methods do nothing instead of failing with a null check in `createTicker`
 * **Added** `SheetController.isAttached`

@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://flutter.wtf/">
-    <img alt="What the Flutter" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/logo.svg" height="140"/>
+    <img alt="What the Flutter" src="https://raw.githubusercontent.com/flutterwtf/wtf_sliding_sheet/master/images/logo.svg" width="140"/>
   </a>
 </p>
 
