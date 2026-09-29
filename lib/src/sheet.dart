@@ -241,7 +241,7 @@ class SlidingSheet extends StatefulWidget {
   // * SlidingSheetDialog fields
 
   /// private, do not use!
-  final _SlidingSheetRoute? route;
+  final _SlidingSheetRoute<dynamic>? route;
 
   /// {@template sliding_sheet.isDismissable}
   /// If false, the `SlidingSheetDialog` will not be dismissable.
@@ -787,6 +787,7 @@ class _SlidingSheetState extends State<SlidingSheet>
 
     // Always assing a SheetController to be able to inherit from it
     sheetController = widget.controller ?? SheetController();
+    sheetController!._attachedTo = this;
 
     // Assign the controller functions to the state functions.
     sheetController!._scrollTo = scrollTo;
@@ -1254,6 +1255,9 @@ class _SlidingSheetState extends State<SlidingSheet>
 
   @override
   void dispose() {
+    // Otherwise the controller keeps calling into this disposed state, and
+    // snapToExtent fails with a null check on `context` in createTicker.
+    sheetController?._detach(this);
     controller.dispose();
     super.dispose();
   }
